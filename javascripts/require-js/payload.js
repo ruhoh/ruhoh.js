@@ -3,32 +3,26 @@
 // in this case : mustache.
 define([
   'jquery',
-  'js-yaml.min'
-], function($){
+  'js-yaml.min',
+  'json!/~jade/data/site.json',
+  'text!/~jade/data/post.yaml',
+  'text!/~jade/data/navigation.yaml',
+  'text!/~jade/data/tags.yaml',
+], function($, z, site, post, navigation, tags){
 
   var Payload = {
     "HOME_PATH" : "/JELLO",
     "BASE_PATH" : "/JELLO",
-    site : null,
-    page : null,
+    site : site,
+    page : jsyaml.load(post),
     content : null,
     buildUrl : function(){ 
       return function(name, render) {return render( "GUPPY" ) }
     }
   }
-    
-  $.getJSON("data/site.json", function(data){ 
-    Payload.site = data;
-  });
-  $.getJSON("data/page.json", function(data){ 
-    Payload.page = data;
-  })
-  $.get("data/navigation.yaml", function(data){ 
-    Payload.navigation = jsyaml.load(data);
-  })
-  $.get("data/tags.yaml", function(data){ 
-    Payload.tags = jsyaml.load(data);
-  })
+  
+  Payload.navigation = jsyaml.load(navigation);
+  Payload.tags = jsyaml.load(tags);
   
   return Payload;
 });
