@@ -1,0 +1,31 @@
+<div class="topbar">
+  <div class="fill">
+    <div class="container">
+      <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+      <ul class="nav">
+      {{#navigation}}
+        <li><a href="{{url}}">{{title}}</a></li>
+      {{/navigation}}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="content">
+    {{{ content }}}
+
+    <BR>{{#buildUrl}}{{name}}{{/buildUrl}}
+  </div>
+
+  <footer>
+    <p>&copy; {{ site.author.name }} 2012 
+      with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+      and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+    </p>
+  </footer>
+
+</div> <!-- /container -->
+
+{% include JB/analytics %}

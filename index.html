@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    <meta name="author" content="{{ site.author.name }}">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="css/1.4.0/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <!--
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/mustache.js"></script>
+    <script src="javascripts/js-yaml.min.js"></script>
+    <script src="javascripts/app.js"></script>
+    -->
+    
+    <script src="javascripts/require-js/require.js"></script>
+  	<script>
+    	require.config({
+    	  baseUrl : "javascripts/require-js/",
+    	  urlArgs: "bust=" + (new Date()).getTime()
+    	});
+
+    	require(['order!jquery','jb'], function($, JB){
+    	  JB.init(function(){
+    	    console.log("callback");
+    	    JB.build();
+    	  });
+    	  
+    	});
+  	</script>
+  	
+  </head>
+
+  <body>
+
+  </body>
+</html>
