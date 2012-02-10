@@ -4,17 +4,18 @@
 define([
   'jquery',
   'js-yaml.min',
+  'post',
   'json!/~jade/data/site.json',
-  'text!/~jade/data/post.yaml',
+  'text!/~jade/data/post.html',
   'text!/~jade/data/navigation.yaml',
   'text!/~jade/data/tags.yaml',
-], function($, z, site, post, navigation, tags){
-
+], function($, z, Post, site, raw_post, navigation, tags){
+  
   var Payload = {
     "HOME_PATH" : "/JELLO",
     "BASE_PATH" : "/JELLO",
     site : site,
-    page : jsyaml.load(post),
+    page : Post.generate(raw_post),
     content : null,
     buildUrl : function(){ 
       return function(name, render) {return render( "GUPPY" ) }
