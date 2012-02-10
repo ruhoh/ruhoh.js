@@ -2,7 +2,7 @@ define([
   'jquery',
   'payload',
   'layouts',
-  'js-yaml.min',
+  'js-yaml',
   'mustache',
 ], function($, Payload, Layouts){
 

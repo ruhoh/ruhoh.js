@@ -1,7 +1,7 @@
 // Post is responsible for generating/parsing 
 // formatted post files.
 define([
-  'js-yaml.min'
+  'js-yaml'
 ], function(){
 
   var Post = {

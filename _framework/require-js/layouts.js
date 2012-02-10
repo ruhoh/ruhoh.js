@@ -1,7 +1,7 @@
 // Load layouts
 define([
   'jquery',
-  'js-yaml.min',
+  'js-yaml',
   'text!/~jade/layouts/default.html',
   'text!/~jade/layouts/post.html',
   'text!/~jade/layouts/page.html'

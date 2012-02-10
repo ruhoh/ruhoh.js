@@ -3,7 +3,7 @@
 // in this case : mustache.
 define([
   'jquery',
-  'js-yaml.min',
+  'js-yaml',
   'post',
   'json!/~jade/data/site.json',
   'text!/~jade/data/post.html',
