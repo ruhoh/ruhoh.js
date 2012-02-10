@@ -1,10 +1,12 @@
 define([
   'jquery',
+  'underscore',
+  'backbone',
   'payload',
   'layouts',
   'js-yaml',
   'mustache',
-], function($, Payload, Layouts){
+], function($, _, Backbone, Payload, Layouts){
 
   var App = { 
     init : function(boot){

@@ -3,19 +3,22 @@
 // in this case : mustache.
 define([
   'jquery',
+  'underscore',
+  'backbone',
   'js-yaml',
   'post',
   'json!/~jade/data/site.json',
-  'text!/~jade/data/post.html',
   'text!/~jade/data/navigation.yaml',
   'text!/~jade/data/tags.yaml',
-], function($, z, Post, site, raw_post, navigation, tags){
+], function($, _, Backbone, z, Post, site, navigation, tags){
   
+  var page = new Post();
+
   var Payload = {
     "HOME_PATH" : "/JELLO",
     "BASE_PATH" : "/JELLO",
     site : site,
-    page : Post.generate(raw_post),
+    page : page.data,
     content : null,
     buildUrl : function(){ 
       return function(name, render) {return render( "GUPPY" ) }
