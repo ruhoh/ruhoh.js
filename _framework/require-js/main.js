@@ -3,8 +3,8 @@ require.config({
   urlArgs: "bust=" + (new Date()).getTime()
 });
 
-require(['order!jquery','jb'], function($, JB){
-  JB.init(function(){
-    JB.build();
+require(['order!jquery','app'], function($, App){
+  App.init(function(){
+    App.build();
   });
 });
