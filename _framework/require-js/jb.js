@@ -14,7 +14,7 @@ define([
     build : function (){
       JB.payload.content = JB.payload.page.content;
       JB.payload.content = $.mustache(JB.layouts.post, JB.payload);
-      $("body").prepend($.mustache(JB.layouts.master, JB.payload));
+      $("body").html($.mustache(JB.layouts.master, JB.payload));
     }
   };
   
