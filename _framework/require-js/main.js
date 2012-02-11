@@ -4,6 +4,7 @@ require.config({
   paths : {
     'underscore': 'libs/underscore-1.3.1-amd', // AMD support
     'backbone': 'libs/backbone-0.9.1-amd', // AMD support
+    'store': 'libs/backbone-localstorage', // AMD support
   }  
 });
 
@@ -13,7 +14,5 @@ require([
   'backbone',
   'app'
 ], function($, _, Backbone, App){
-  App.init(function(){
-    App.build();
-  });
+  App.init();
 });
