@@ -4,9 +4,12 @@ define([
   'backbone',
   'models/layout',
   'models/post',
+  'models/site',
+  'models/navigation',
+  'models/tags',
   'models/payload',
   'mustache'
-], function($, _, Backbone, Layout, Post, Payload){
+], function($, _, Backbone, Layout, Post, Site, Navigation, Tags, Payload){
 
   // Preview object builds a preview of a given page/post
   //
@@ -23,40 +26,46 @@ define([
     payload : Payload,
 
     initialize : function(){
+      
       this.master = new Layout({id : "default"});
       this.sub = new Layout({id : "post"});
       this.post = new Post();
-      this.payload = new Payload();
-      
+      this.site = new Site();
+      this.navigation = new Navigation();
+      this.tags = new Tags();
+
       var that = this;
       $.when(
         this.master.deferred, this.sub.deferred, 
-        this.post.deferred
+        this.post.deferred, this.site.deferred,
+        this.navigation.deferred, this.tags.deferred
       ).then(function(){ 
         that.process();
-        that.render();
       });
     },
   
-    // Process the data we need to build the payload,
-    // and parse the templates.
+    // - Build the payload.
+    // - Process sub and master templates.
+    // - Render the result.
     process : function(){
 
-      // Set the current pages data into the payload. {{ page }}
+      this.payload = new Payload();
+      this.payload.set("site", this.site.attributes);
+      this.payload.set("navigation", this.navigation.get("data"));
+      this.payload.set("tags", this.tags.get("data"));
       this.payload.set("page", this.post.attributes);
-    
-      // Make {{ content }} return page.content for the sibling-template.
-      // TODO: Parse post/page markup (markdown).
+      
+      // Set post as content for sub-template.
       this.payload.set("content", this.post.get("content"));
-    
-      // Mustachify the sibling-template w/page content
-      // and re-place into payload in preparation for master template.
-      this.payload.set("content", $.mustache(this.sub.get("content"), this.payload.attributes));
-    },
+      
+      // Process the post+sub-template
+      var processedSub = $.mustache(this.sub.get("content"), this.payload.attributes)
 
-    // The payload is now ready to go into master template
-    //  Mustachify the master template and render it onto the page.
-    render : function(){
+      // Set processed *post+sub-template* as content for master-template.
+      this.payload.set("content", processedSub);
+      
+      // Process the master template with post+sub-template
+      // Render the result into the browser.
       $("body").html($.mustache(this.master.get("content"), this.payload.attributes));
     }
   
