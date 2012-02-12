@@ -10,8 +10,6 @@ define([
 
     initialize : function(){
       this.set({
-        "HOME_PATH" : "/JELLO",
-        "BASE_PATH" : "/JELLO",
         buildUrl : function(){ 
           return function(name, render) {return render( "GUPPY" ) }
         }

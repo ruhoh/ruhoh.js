@@ -9,10 +9,11 @@ define([
 	return Backbone.Model.extend({
 
     url : function(){
-      return '/~jade/layouts/'+this.id +'.html';
+      return this.path +'/layouts/'+this.id +'.html';
     },
 		
-		initialize : function(){
+		initialize : function(attrs){
+		  this.path = attrs.path;
 		  this.deferred = this.fetch({dataType : "html", cache : false });
 		},
 
