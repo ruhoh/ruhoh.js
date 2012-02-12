@@ -10,14 +10,14 @@ define([
   // really need individual tag objects, just the sample data to iterate over.
 	return Backbone.Model.extend({
 
-    url : function(){
-      return '/~jade/data/tags.yaml';
-    },
-		
-		initialize : function(){
+		initialize : function(attrs){
 		  this.deferred = this.fetch({dataType : "html", cache : false });
 		},
 
+    url : function(){
+      return this.getPath('/data/tags.yaml');
+    },
+    
 		parse : function(response){
 		  this.set("data", jsyaml.load(response));
 		  return this.attributes;

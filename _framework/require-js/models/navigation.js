@@ -8,14 +8,14 @@ define([
   // Navigation Model
 	return Backbone.Model.extend({
 
-    url : function(){
-      return '/~jade/data/navigation.yaml';
-    },
-		
-		initialize : function(){
+		initialize : function(attrs){
 		  this.deferred = this.fetch({dataType : "html", cache : false });
 		},
-
+    
+    url : function(){
+      return this.getPath('/data/navigation.yaml');
+    },
+    
 		parse : function(response){
 		  this.set("data", jsyaml.load(response));
 		  return this.attributes;

@@ -8,15 +8,14 @@ define([
   // Layout Model
 	return Backbone.Model.extend({
 
-    url : function(){
-      return this.path +'/layouts/'+this.id +'.html';
-    },
-		
-		initialize : function(attrs){
-		  this.path = attrs.path;
+    initialize : function(attrs){
 		  this.deferred = this.fetch({dataType : "html", cache : false });
 		},
-
+		
+    url : function(){
+      return this.getThemePath('/layouts/'+ this.id +'.html');
+    },
+		
 		parse : function(response){
 		  this.set("content", response);
 		  return this.attributes;
