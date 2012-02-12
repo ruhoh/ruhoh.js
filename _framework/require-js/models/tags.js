@@ -8,21 +8,21 @@ define([
   // Tags Model
   // Perhaps this should be a collection but we don't
   // really need individual tag objects, just the sample data to iterate over.
-	return Backbone.Model.extend({
+  return Backbone.Model.extend({
 
-		initialize : function(attrs){
-		  this.deferred = this.fetch({dataType : "html", cache : false });
-		},
+    initialize : function(attrs){
+      this.deferred = this.fetch({dataType : "html", cache : false });
+    },
 
     url : function(){
       return this.getPath('/data/tags.yaml');
     },
     
-		parse : function(response){
-		  this.set("data", jsyaml.load(response));
-		  return this.attributes;
-		}
-		
-	});
+    parse : function(response){
+      this.set("data", jsyaml.load(response));
+      return this.attributes;
+    }
+    
+  });
 
 });
