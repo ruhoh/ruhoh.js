@@ -2,13 +2,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/post',
+  'models/page',
   'models/layout',
   'models/payload',
   'models/preview',
   'js-yaml',
   'mustache',
-], function($, _, Backbone, Post, Layout, Payload, Preview){
+], function($, _, Backbone, Page, Layout, Payload, Preview){
   
   var App = { 
 

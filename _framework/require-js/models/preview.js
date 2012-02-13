@@ -3,13 +3,13 @@ define([
   'underscore',
   'backbone',
   'models/layout',
-  'models/post',
+  'models/page',
   'models/site',
   'models/navigation',
   'models/tags',
   'models/payload',
   'mustache'
-], function($, _, Backbone, Layout, Post, Site, Navigation, Tags, Payload){
+], function($, _, Backbone, Layout, Page, Site, Navigation, Tags, Payload){
 
   // Preview object builds a preview of a given page/post
   //
@@ -22,12 +22,12 @@ define([
   return Backbone.Model.extend({ 
     master : Layout,
     sub : Layout,
-    post : Post,
+    page : Page,
     payload : Payload,
 
     initialize : function(attrs){
 
-      this.page = new Post({id : attrs.page });
+      this.page = new Page({id : attrs.page });
       this.site = new Site();
       this.navigation = new Navigation();
       this.tags = new Tags();
@@ -64,10 +64,10 @@ define([
         "content" : this.page.get("content")
       });
       
-      // Process the post+sub-template
+      // Process the page/post+sub-template
       var processedSub = $.mustache(this.page.sub.get("content"), this.payload.attributes)
 
-      // Set processed *post+sub-template* as content for master-template.
+      // Set processed *page/post+sub-template* as content for master-template.
       this.payload.set("content", processedSub);
       
       // Process the master template with post+sub-template

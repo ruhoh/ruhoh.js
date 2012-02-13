@@ -6,12 +6,13 @@ define([
   'js-yaml',
 ], function($, _, Backbone, Layout){
 
-  // Post Model
+  // Page Model 
+  // Represents a post or page.
   return Backbone.Model.extend({
     // Matcher for YAML Front Matter
     FMregex : /^---\n(.|\n)*---\n/,
 
-    // Fetch the post and resolve all template dependencies.
+    // Fetch the page/post and resolve all template dependencies.
     // TODO: This probably can be implemented a lot better.
     initialize : function(attrs){
       var dfd = $.Deferred();
@@ -42,7 +43,7 @@ define([
       return this.getPath('/data/'+this.id);
     },
 
-    // Parse the raw post file.
+    // Parse the raw page/post file.
     parse : function(response){ 
       this.parseFrontMatter(response);
       this.parseContent(response);
