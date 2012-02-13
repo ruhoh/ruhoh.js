@@ -51,17 +51,17 @@ define([
     process : function(){
 
       this.payload = new Payload();
-      this.payload.set("site", this.site.attributes);
-      this.payload.set("ASSET_PATH", this.getThemePath());
-      this.payload.set("HOME_PATH", this.getPath());
-      this.payload.set("BASE_PATH", this.getPath());
-      
-      this.payload.set("navigation", this.navigation.get("data"));
-      this.payload.set("tags", this.tags.get("data"));
-      this.payload.set("page", this.post.attributes);
-      
-      // Set post as content for sub-template.
-      this.payload.set("content", this.post.get("content"));
+      this.payload.set({
+        "site" : this.site.attributes,
+        "ASSET_PATH" : this.getThemePath(),
+        "HOME_PATH" : this.getPath(),
+        "BASE_PATH" : this.getPath(),
+        "navigation" : this.navigation.get("data"),
+        "tags" : this.tags.get("data"),
+        "page" : this.post.attributes,
+        // Set post as content for sub-template.
+        "content" : this.post.get("content")
+      });
       
       // Process the post+sub-template
       var processedSub = $.mustache(this.sub.get("content"), this.payload.attributes)
