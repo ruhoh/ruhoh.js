@@ -17,8 +17,7 @@ define([
       var config = {
         basePath : this.buildBasePath(window.location.origin + window.location.pathname),
         theme : (this.getQueryParam('theme') || 'twitter'),
-        master : "default",
-        page: "post.html",
+        page: "/_sample_kit/post.html",
       }
       
       // TODO: Make this better and less hacky.

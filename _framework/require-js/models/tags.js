@@ -15,7 +15,7 @@ define([
     },
 
     url : function(){
-      return this.getPath('/data/tags.yaml');
+      return this.getPath('/_sample_kit/tags.yaml');
     },
     
     parse : function(response){

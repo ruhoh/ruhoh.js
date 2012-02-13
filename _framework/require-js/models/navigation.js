@@ -13,7 +13,7 @@ define([
     },
     
     url : function(){
-      return this.getPath('/data/navigation.yaml');
+      return this.getPath('/_sample_kit/navigation.yaml');
     },
     
     parse : function(response){

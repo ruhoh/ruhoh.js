@@ -12,7 +12,7 @@ define([
     },
 
     url : function(){
-      return this.getPath('/data/site.json');
+      return this.getPath('/_sample_kit/site.json');
     }
     
   });

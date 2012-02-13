@@ -39,7 +39,7 @@ define([
     },
     
     url : function(){
-      return this.getPath('/data/'+this.id);
+      return this.getPath(this.id);
     },
 
     // Parse the raw page/post file.
