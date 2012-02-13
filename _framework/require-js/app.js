@@ -17,10 +17,8 @@ define([
         basePath : this.buildBasePath(window.location.origin + window.location.pathname),
         theme : (this.getQueryParam('theme') || 'twitter'),
         master : "default",
-        sub: "post",
         page: "post.html",
       }
-      
       
       // TODO: Make this better and less hacky.
       _.extend(Backbone.Model.prototype, {

@@ -27,26 +27,23 @@ define([
 
     initialize : function(attrs){
 
-      this.master = new Layout({id : attrs.master });
-      this.sub = new Layout({id : attrs.sub });
-      this.post = new Post({id : attrs.page });
-
+      this.page = new Post({id : attrs.page });
       this.site = new Site();
       this.navigation = new Navigation();
       this.tags = new Tags();
-
+      
       var that = this;
       $.when(
-        this.master.deferred, this.sub.deferred, 
-        this.post.deferred, this.site.deferred,
+        this.page.deferred, this.site.deferred,
         this.navigation.deferred, this.tags.deferred
-      ).then(function(){ 
+      ).then(function(){
         that.process();
       }, function(a, status, message){
         var response = status + ": " + message;
         $("body").html('<h2>'+ response +'</h2><p>'+ this.url +'</p');
         throw(response + ": " + this.url);
       });
+      
     },
     
     // - Build the payload.
@@ -62,20 +59,20 @@ define([
         "BASE_PATH" : this.getPath(),
         "navigation" : this.navigation.get("data"),
         "tags" : this.tags.get("data"),
-        "page" : this.post.attributes,
-        // Set post as content for sub-template.
-        "content" : this.post.get("content")
+        "page" : this.page.attributes,
+        // Set page content as {{content}} for sub-template.
+        "content" : this.page.get("content")
       });
       
       // Process the post+sub-template
-      var processedSub = $.mustache(this.sub.get("content"), this.payload.attributes)
+      var processedSub = $.mustache(this.page.sub.get("content"), this.payload.attributes)
 
       // Set processed *post+sub-template* as content for master-template.
       this.payload.set("content", processedSub);
       
       // Process the master template with post+sub-template
       // Render the result into the browser.
-      $("body").html($.mustache(this.master.get("content"), this.payload.attributes));
+      $("body").html($.mustache(this.page.master.get("content"), this.payload.attributes));
     }
   
   });

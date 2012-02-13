@@ -2,16 +2,40 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'models/layout',
   'js-yaml',
-], function($, _, Backbone){
+], function($, _, Backbone, Layout){
 
   // Post Model
   return Backbone.Model.extend({
     // Matcher for YAML Front Matter
     FMregex : /^---\n(.|\n)*---\n/,
 
+    // Fetch the post and resolve all template dependencies.
+    // TODO: This probably can be implemented a lot better.
     initialize : function(attrs){
-      this.deferred = this.fetch({dataType : "html", cache : false});
+      var dfd = $.Deferred();
+      var that = this;
+
+      $.when(this.fetch({dataType : "html", cache : false})).then(function(){
+
+        that.sub = new Layout({id :  that.get("layout") });
+
+        $.when(that.sub.deferred).then(function(){
+          
+          that.master = new Layout({id : "default" });
+          
+          $.when(that.master.deferred).then(function(){
+            dfd.resolve();
+          })
+          
+        }).fail(function(a, status, message){
+            throw(status + ": " + message + ": " + this.url);
+          })
+
+      })
+      
+      this.deferred = dfd;
     },
     
     url : function(){
