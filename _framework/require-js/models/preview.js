@@ -29,8 +29,8 @@ define([
 
       this.master = new Layout({id : attrs.master });
       this.sub = new Layout({id : attrs.sub });
+      this.post = new Post({id : attrs.page });
 
-      this.post = new Post();
       this.site = new Site();
       this.navigation = new Navigation();
       this.tags = new Tags();

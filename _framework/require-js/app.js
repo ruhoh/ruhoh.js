@@ -47,7 +47,8 @@ define([
       
       this.preview = new Preview({
         master : "default",
-        sub: "post"
+        sub: "post",
+        page: "post.html",
       });
       
       if(typeof boot === "function") boot();

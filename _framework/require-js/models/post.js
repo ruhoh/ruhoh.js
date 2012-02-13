@@ -15,7 +15,7 @@ define([
     },
     
     url : function(){
-      return this.getPath('/data/post.html');
+      return this.getPath('/data/'+this.id);
     },
 
     // Parse the raw post file.
