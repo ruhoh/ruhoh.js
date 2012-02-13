@@ -15,34 +15,37 @@ define([
   var App = { 
     
     init : function(boot){
-      this.setupRouter();
+      var config = {
+        basePath : this.buildBasePath(window.location.origin + window.location.pathname),
+        theme : (this.getQueryParam('theme') || 'twitter'),
+        page: "/_sample_kit/post.html",
+      }
+      
+      this.preview = new Preview;
+      this.Router = new Router;
+
+      this.extendModels(config);
+      this.initRouting(config);
+
       if(typeof boot === "function") boot();
     },
     
     // Public: Setup Routing.
     // Preview rendering is handled by the Router.
     // Returns: Nothing
-    setupRouter : function(){
+    initRouting : function(config){
       var that = this;
       
-      this.Router = new Router;
-      
-      var config = {
-        basePath : this.buildBasePath(window.location.origin + window.location.pathname),
-        theme : (this.getQueryParam('theme') || 'twitter'),
-        page: "/_sample_kit/post.html",
-      }
-
       this.Router.bind("route:home", function(){
         console.log("Home Bind");
         config.page = "/_sample_kit/post.html";
-        that.setupPreview(config);
+        that.preview.update(config);
       })
       
       this.Router.bind("route:page", function(page){
         console.log("Page Bind");
         config.page = "/_sample_kit/page.html";
-        that.setupPreview(config);
+        that.preview.update(config);
       })
       
       // Hand off all link events to the Router.
@@ -56,9 +59,8 @@ define([
       Backbone.history.start({pushState: true, root: "/~jade/"});
     },
     
-    setupPreview : function(config){
-      
-      // TODO: Make this better and less hacky.
+    // TODO: Make this better and less hacky.
+    extendModels : function(config){
       _.extend(Backbone.Model.prototype, {
         basePath : config.basePath,
         theme : config.theme,
@@ -87,8 +89,6 @@ define([
         }
         
       })
-      
-      this.preview = new Preview(config);
     },
     
     

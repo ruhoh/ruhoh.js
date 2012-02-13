@@ -27,12 +27,17 @@ define([
 
     initialize : function(attrs){
 
+    },
+    
+    update : function(attrs){
+      var that = this;
+      
       this.page = new Page({id : attrs.page });
       this.site = new Site();
       this.navigation = new Navigation();
       this.tags = new Tags();
+      this.payload = new Payload();
       
-      var that = this;
       $.when(
         this.page.deferred, this.site.deferred,
         this.navigation.deferred, this.tags.deferred
@@ -43,7 +48,6 @@ define([
         $("body").html('<h2>'+ response +'</h2><p>'+ this.url +'</p');
         throw(response + ": " + this.url);
       });
-      
     },
     
     // - Build the payload.
@@ -51,7 +55,6 @@ define([
     // - Render the result.
     process : function(){
 
-      this.payload = new Payload();
       this.payload.set({
         "site" : this.site.attributes,
         "ASSET_PATH" : this.getThemePath(),
