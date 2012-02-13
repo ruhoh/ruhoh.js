@@ -42,6 +42,10 @@ define([
         this.navigation.deferred, this.tags.deferred
       ).then(function(){ 
         that.process();
+      }, function(a, status, message){
+        var response = status + ": " + message;
+        $("body").html('<h2>'+ response +'</h2><p>'+ this.url +'</p');
+        throw(response + ": " + this.url);
       });
     },
     
