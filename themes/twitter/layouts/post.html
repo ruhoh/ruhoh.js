@@ -36,9 +36,9 @@
 
     <h4>Tags</h4>
     <ul class="tag_box">
-    {{#tags}}
-      <li><a href="{{ BASE_PATH }}{{ site.JB.tags_path }}#{{ name }}-ref">{{ name }} <span>{{ count }}</span></a></li>
-    {{/tags}}
+    {{#page.tags}}
+    <li><a href="{{ BASE_PATH }}{{ site.JB.tags_path }}#{{ name }}-ref">{{ name }} <span>{{ count }}</span></a></li>
+    {{/page.tags}}
     </ul>
   </div>
 </div>
