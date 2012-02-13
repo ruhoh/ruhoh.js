@@ -7,18 +7,56 @@ define([
   'models/payload',
   'models/preview',
   'parse',
+  'router',
   'js-yaml',
   'mustache',
-], function($, _, Backbone, Page, Layout, Payload, Preview, Parse){
+], function($, _, Backbone, Page, Layout, Payload, Preview, Parse, Router){
   
   var App = { 
-
+    
     init : function(boot){
+      this.setupRouter();
+      if(typeof boot === "function") boot();
+    },
+    
+    // Public: Setup Routing.
+    // Preview rendering is handled by the Router.
+    // Returns: Nothing
+    setupRouter : function(){
+      var that = this;
+      
+      this.Router = new Router;
+      
       var config = {
         basePath : this.buildBasePath(window.location.origin + window.location.pathname),
         theme : (this.getQueryParam('theme') || 'twitter'),
         page: "/_sample_kit/post.html",
       }
+
+      this.Router.bind("route:home", function(){
+        console.log("Home Bind");
+        config.page = "/_sample_kit/post.html";
+        that.setupPreview(config);
+      })
+      
+      this.Router.bind("route:page", function(page){
+        console.log("Page Bind");
+        config.page = "/_sample_kit/page.html";
+        that.setupPreview(config);
+      })
+      
+      // Hand off all link events to the Router.
+      $("body").find('a').live("click", function(e){
+        that.Router.navigate(this.href.split("/").pop(), {trigger: true})
+        e.preventDefault();
+        return false;
+      });
+      
+      // Start Router.
+      Backbone.history.start({pushState: true, root: "/~jade/"});
+    },
+    
+    setupPreview : function(config){
       
       // TODO: Make this better and less hacky.
       _.extend(Backbone.Model.prototype, {
@@ -51,11 +89,9 @@ define([
       })
       
       this.preview = new Preview(config);
-      
-      if(typeof boot === "function") boot();
     },
     
-
+    
     // Internal: Normalizes a root domain into a well-formed URL.
     // 
     // root - (Required) String the root url of the webpage the app loads within.
