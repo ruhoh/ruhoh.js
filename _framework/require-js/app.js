@@ -11,14 +11,21 @@ define([
 ], function($, _, Backbone, Post, Layout, Payload, Preview){
   
   var App = { 
-    
-    init : function(boot){
 
+    init : function(boot){
+      var config = {
+        basePath : this.buildBasePath(window.location.origin + window.location.pathname),
+        theme : (this.getQueryParam('theme') || 'twitter'),
+        master : "default",
+        sub: "post",
+        page: "post.html",
+      }
+      
+      
       // TODO: Make this better and less hacky.
-      var basePath = this.buildBasePath(window.location.origin + window.location.pathname);
       _.extend(Backbone.Model.prototype, {
-        basePath : basePath,
-        theme : "twitter",
+        basePath : config.basePath,
+        theme : config.theme,
         
         // Internal: Get a normalized, absolute path for the App Session.
         // Normalizes submitted paths into a well-formed url.
@@ -45,11 +52,7 @@ define([
         
       })
       
-      this.preview = new Preview({
-        master : "default",
-        sub: "post",
-        page: "post.html",
-      });
+      this.preview = new Preview(config);
       
       if(typeof boot === "function") boot();
     },
@@ -63,8 +66,21 @@ define([
       var nodes = root.split('/');
       if(["", "index.html"].indexOf(_.last(nodes)) !== -1 ) nodes.pop();
       return nodes;
+    },
+    
+    // Thanks: Amr ElGarhy - http://stackoverflow.com/a/3388227/101940
+    getQueryParam : function (variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+          return pair[1];
+        }
+      }
+      return null;
     }
-        
+
   };
   
   return App;
