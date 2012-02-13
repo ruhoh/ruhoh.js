@@ -6,9 +6,10 @@ define([
   'models/layout',
   'models/payload',
   'models/preview',
+  'parse',
   'js-yaml',
   'mustache',
-], function($, _, Backbone, Page, Layout, Payload, Preview){
+], function($, _, Backbone, Page, Layout, Payload, Preview, Parse){
   
   var App = { 
 

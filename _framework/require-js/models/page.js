@@ -3,14 +3,13 @@ define([
   'underscore',
   'backbone',
   'models/layout',
+  'parse',
   'js-yaml',
-], function($, _, Backbone, Layout){
+], function($, _, Backbone, Layout, Parse){
 
   // Page Model 
   // Represents a post or page.
   return Backbone.Model.extend({
-    // Matcher for YAML Front Matter
-    FMregex : /^---\n(.|\n)*---\n/,
 
     // Fetch the page/post and resolve all template dependencies.
     // TODO: This probably can be implemented a lot better.
@@ -44,34 +43,12 @@ define([
     },
 
     // Parse the raw page/post file.
-    parse : function(response){ 
-      this.parseFrontMatter(response);
-      this.parseContent(response);
+    parse : function(data){ 
+      this.set(Parse.frontMatter(data));
+      this.set("content", Parse.content(data));
       return this.attributes;
-    },
-    
-    // Parse and store the YAML Front Matter from the file.
-    parseFrontMatter : function(response){
-      var front_matter = this.FMregex.exec(response);
-      if(!front_matter) throw("INVALID FRONT MATTER");
-      front_matter = front_matter[0].replace(/---\n/g, "");
-      this.set(jsyaml.load(front_matter));
-      
-      // transform tags array into an array of tag objects
-      // for normalized use in templates.
-      var tags  = [];
-      _.each(this.get("tags"), function(name){
-        tags.push({name : name, count : 0 })
-      })
-      this.set("tags", tags);
-    },
-    
-    // parse and set the content data.
-    // TODO: markdown/textile etc.
-    parseContent : function(response){
-      this.set("content", response.replace(this.FMregex, ""));
     }
-    
+
   });
 
 });
