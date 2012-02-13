@@ -23,7 +23,7 @@ define([
 
         $.when(that.sub.deferred).then(function(){
           
-          that.master = new Layout({id : "default" });
+          that.master = new Layout({id : that.sub.get("layout") });
           
           $.when(that.master.deferred).then(function(){
             dfd.resolve();
