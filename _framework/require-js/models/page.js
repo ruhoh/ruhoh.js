@@ -27,20 +27,24 @@ define([
 
       $.when(this.fetch({dataType : "html", cache : false})).then(function(){
 
+        if(!that.get("layout")) throw("Page/Post requires a valid layout setting. (e.g. layout: post) ");
+          
         that.sub.set("id", that.get("layout"));
-
         $.when(that.sub.generate()).then(function(){
-          
-          that.master.set("id", that.sub.get("layout"))
-          
-          $.when(that.master.generate()).then(function(){
-            $dfd.resolve();
-          })
-          
-        }).fail(function(a, status, message){
-            throw(status + ": " + message + ": " + this.url);
-          })
 
+          if(that.sub.get("layout")){
+            that.master.set("id", that.sub.get("layout"))
+            $.when(that.master.generate()).then(function(){
+              $dfd.resolve();
+            })
+          } 
+          else {
+            $dfd.resolve();
+          }
+        })
+
+      }).fail(function(a, status, message){
+        throw(status + ": " + message + ": " + this.url);
       })
       
       return $dfd;

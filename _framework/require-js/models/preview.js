@@ -69,15 +69,23 @@ define([
         "content" : this.page.get("content")
       });
       
-      // Process the page/post+sub-template
-      var processedSub = $.mustache(this.page.sub.get("content"), this.payload.attributes)
 
-      // Set processed *page/post+sub-template* as content for master-template.
-      this.payload.set("content", processedSub);
+      // Process the page/post+sub-template
+      var output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
       
-      // Process the master template with post+sub-template
-      // Render the result into the browser.
-      $("body").html($.mustache(this.page.master.get("content"), this.payload.attributes));
+      // An undefined master means the page/post layouts is only one deep.
+      // This means it expects to load directly into a master template.
+      if(this.page.master.id){
+        
+        // Set processed *page/post+sub-template* as content for master-template.
+        this.payload.set("content", output);
+
+        // Process the master template with post+sub-template
+        // Render the result into the browser.
+        output = $.mustache(this.page.master.get("content"), this.payload.attributes);
+      }
+      
+      $("body").html(output);
     }
   
   });
