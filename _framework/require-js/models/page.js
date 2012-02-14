@@ -12,7 +12,8 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-
+      this.sub = new Layout;
+      this.master = new Layout;
     },
     
     // Public: Fetch a page/post and resolve all template dependencies.
@@ -26,13 +27,13 @@ define([
 
       $.when(this.fetch({dataType : "html", cache : false})).then(function(){
 
-        that.sub = new Layout({id :  that.get("layout") });
+        that.sub.set("id", that.get("layout"));
 
-        $.when(that.sub.deferred).then(function(){
+        $.when(that.sub.generate()).then(function(){
           
-          that.master = new Layout({id : that.sub.get("layout") });
+          that.master.set("id", that.sub.get("layout"))
           
-          $.when(that.master.deferred).then(function(){
+          $.when(that.master.generate()).then(function(){
             $dfd.resolve();
           })
           
