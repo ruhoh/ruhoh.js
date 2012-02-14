@@ -11,6 +11,7 @@ define([
     initialize : function(attrs){
       this.set({
         basePath : this.buildBasePath(window.location.href),
+        dataPath : '/_framework/sample_kit/',
         theme : (this.getQueryParam('theme') || 'twitter')
       });
     },
@@ -36,6 +37,10 @@ define([
     // Returns: String - Normalized absolute URL paath to theme assets.
     getThemePath : function(path){
       return this.getPath("/themes/" + this.get("theme") + '/' + (path || ""));
+    },
+    
+    getDataPath : function(path){
+      return this.getPath(this.get('dataPath') + '/' + (path || ""));
     },
     
     // Internal: Normalizes a root domain into a well-formed URL.

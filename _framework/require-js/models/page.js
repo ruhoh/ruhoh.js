@@ -41,7 +41,7 @@ define([
     },
     
     url : function(){
-      return this.config.getPath(this.id);
+      return this.config.getDataPath(this.id);
     },
 
     // Parse the raw page/post file.

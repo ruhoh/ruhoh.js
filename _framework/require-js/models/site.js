@@ -16,7 +16,7 @@ define([
     },
 
     url : function(){
-      return this.config.getPath('/_framework/sample_kit/data/site.json');
+      return this.config.getDataPath('/data/site.json');
     }
     
   });

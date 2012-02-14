@@ -31,12 +31,12 @@ define([
       
       this.Router.bind("route:home", function(){
         console.log("Home Bind");
-        that.preview.page.set("id", "/_framework/sample_kit/index.html")
+        that.preview.page.set("id", "index.html")
       })
       
       this.Router.bind("route:page", function(page){
         console.log("Page Bind");
-        that.preview.page.set("id", "/_framework/sample_kit/"+ page);
+        that.preview.page.set("id", page);
       })
       
       // Hand off all link events to the Router.

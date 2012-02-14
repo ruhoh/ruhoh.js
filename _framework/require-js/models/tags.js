@@ -19,7 +19,7 @@ define([
     },
     
     url : function(){
-      return this.config.getPath('/_framework/sample_kit/data/tags.yaml');
+      return this.config.getDataPath('/data/tags.yaml');
     },
     
     parse : function(response){
