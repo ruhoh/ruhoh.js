@@ -18,7 +18,7 @@ define([
     },
     
     url : function(){
-      return this.getThemePath('/layouts/'+ this.id +'.html');
+      return this.config.getThemePath('/layouts/'+ this.id +'.html');
     },
     
     parse : function(data){

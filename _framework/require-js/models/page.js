@@ -3,17 +3,17 @@ define([
   'underscore',
   'backbone',
   'models/layout',
+  'models/config',
   'parse',
   'js-yaml',
-], function($, _, Backbone, Layout, Parse){
+], function($, _, Backbone, Layout, Config, Parse){
 
   // Page Model 
   // Represents a post or page.
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      this.sub = new Layout;
-      this.master = new Layout;
+
     },
     
     // Public: Fetch a page/post and resolve all template dependencies.
@@ -51,7 +51,7 @@ define([
     },
     
     url : function(){
-      return this.getPath(this.id);
+      return this.config.getPath(this.id);
     },
 
     // Parse the raw page/post file.

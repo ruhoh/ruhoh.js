@@ -8,8 +8,9 @@ define([
   'models/navigation',
   'models/tags',
   'models/payload',
+  'models/config',
   'mustache'
-], function($, _, Backbone, Layout, Page, Site, Navigation, Tags, Payload){
+], function($, _, Backbone, Layout, Page, Site, Navigation, Tags, Payload, Config){
 
   // Preview object builds a preview of a given page/post
   //
@@ -27,11 +28,24 @@ define([
 
     initialize : function(attrs){
       this.page = new Page;
+      this.page.sub = new Layout;
+      this.page.master = new Layout;
+      
       this.site = new Site;
       this.navigation = new Navigation;
       this.tags = new Tags;
       this.payload = new Payload;
       
+      // Set pointers to a single Config.
+      this.config = new Config,
+      this.page.config = this.config,
+      this.page.sub.config = this.config,
+      this.page.master.config = this.config,
+      this.site.config = this.config,
+      this.navigation.config = this.config,
+      this.tags.config = this.config,
+      this.payload.config = this.config;
+
       this.page.bind("change:id", function(){
         console.log("THE PAGE ID HAS CHANGED TO: "+ this.page.id);
         this.generate();
@@ -59,9 +73,9 @@ define([
 
       this.payload.set({
         "site" : this.site.attributes,
-        "ASSET_PATH" : this.getThemePath(),
-        "HOME_PATH" : this.getPath(),
-        "BASE_PATH" : this.getPath(),
+        "ASSET_PATH" : this.config.getThemePath(),
+        "HOME_PATH" : this.config.getPath(),
+        "BASE_PATH" : this.config.getPath(),
         "navigation" : this.navigation.get("data"),
         "tags" : this.tags.get("data"),
         "page" : this.page.attributes,

@@ -17,7 +17,7 @@ define([
     },
     
     url : function(){
-      return this.getPath('/_sample_kit/navigation.yaml');
+      return this.config.getPath('/_sample_kit/navigation.yaml');
     },
     
     parse : function(response){
