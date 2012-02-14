@@ -27,6 +27,11 @@ define([
 
     initialize : function(attrs){
       this.page = new Page;
+      this.site = new Site;
+      this.navigation = new Navigation;
+      this.tags = new Tags;
+      this.payload = new Payload;
+      
       this.page.bind("change:id", function(){
         console.log("THE PAGE ID HAS CHANGED TO: "+ this.page.id);
         this.update();
@@ -35,14 +40,9 @@ define([
     
     update : function(){
       var that = this;
-      this.site = new Site();
-      this.navigation = new Navigation();
-      this.tags = new Tags();
-      this.payload = new Payload();
-      
       $.when(
-        this.page.generate(), this.site.deferred,
-        this.navigation.deferred, this.tags.deferred
+        this.page.generate(), this.site.generate(),
+        this.navigation.generate(), this.tags.generate()
       ).then(function(){
         that.process();
       }, function(a, status, message){

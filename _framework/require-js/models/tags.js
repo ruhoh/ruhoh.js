@@ -11,9 +11,13 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      this.deferred = this.fetch({dataType : "html", cache : false });
-    },
 
+    },
+    
+    generate : function(){
+      return this.fetch({dataType : "html", cache : false });
+    },
+    
     url : function(){
       return this.getPath('/_sample_kit/tags.yaml');
     },

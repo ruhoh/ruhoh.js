@@ -8,7 +8,11 @@ define([
   return Backbone.Model.extend({
     
     initialize : function(attrs){
-      this.deferred = this.fetch({ cache : false });
+
+    },
+    
+    generate : function(){
+      return this.fetch({ cache : false });
     },
 
     url : function(){
