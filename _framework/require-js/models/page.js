@@ -17,37 +17,27 @@ define([
     },
     
     // Public: Fetch a page/post and resolve all template dependencies.
+    // Template promises are *piped* up to the parent page promise.
     // TODO: This probably can be implemented a lot better.
     // Returns: jQuery Deferred object. This ensures all despendencies
     //   are resolved before the generate promise is kept.
     generate : function(){
       console.log("generating page");
-      var $dfd = $.Deferred();
       var that = this;
 
-      $.when(this.fetch({dataType : "html", cache : false})).then(function(){
-
+      return this.fetch({dataType : "html", cache : false}).pipe(function(){
         if(!that.get("layout")) throw("Page/Post requires a valid layout setting. (e.g. layout: post) ");
-          
+        
         that.sub.set("id", that.get("layout"));
-        $.when(that.sub.generate()).then(function(){
-
+        return that.sub.generate().pipe(function(){
           if(that.sub.get("layout")){
             that.master.set("id", that.sub.get("layout"))
-            $.when(that.master.generate()).then(function(){
-              $dfd.resolve();
-            })
-          } 
-          else {
-            $dfd.resolve();
+            return that.master.generate();
           }
         })
-
       }).fail(function(a, status, message){
         throw(status + ": " + message + ": " + this.url);
       })
-      
-      return $dfd;
     },
     
     url : function(){
