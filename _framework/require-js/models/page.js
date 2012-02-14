@@ -11,10 +11,17 @@ define([
   // Represents a post or page.
   return Backbone.Model.extend({
 
-    // Fetch the page/post and resolve all template dependencies.
-    // TODO: This probably can be implemented a lot better.
     initialize : function(attrs){
-      var dfd = $.Deferred();
+
+    },
+    
+    // Public: Fetch a page/post and resolve all template dependencies.
+    // TODO: This probably can be implemented a lot better.
+    // Returns: jQuery Deferred object. This ensures all despendencies
+    //   are resolved before the generate promise is kept.
+    generate : function(){
+      console.log("generating page");
+      var $dfd = $.Deferred();
       var that = this;
 
       $.when(this.fetch({dataType : "html", cache : false})).then(function(){
@@ -26,7 +33,7 @@ define([
           that.master = new Layout({id : that.sub.get("layout") });
           
           $.when(that.master.deferred).then(function(){
-            dfd.resolve();
+            $dfd.resolve();
           })
           
         }).fail(function(a, status, message){
@@ -35,7 +42,7 @@ define([
 
       })
       
-      this.deferred = dfd;
+      return $dfd;
     },
     
     url : function(){

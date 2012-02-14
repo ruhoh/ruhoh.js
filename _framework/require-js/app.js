@@ -18,7 +18,6 @@ define([
       var config = {
         basePath : this.buildBasePath(window.location.origin + window.location.pathname),
         theme : (this.getQueryParam('theme') || 'twitter'),
-        page: "/_sample_kit/post.html",
       }
       
       this.preview = new Preview;
@@ -38,14 +37,12 @@ define([
       
       this.Router.bind("route:home", function(){
         console.log("Home Bind");
-        config.page = "/_sample_kit/post.html";
-        that.preview.update(config);
+        that.preview.page.set("id", "/_sample_kit/post.html")
       })
       
       this.Router.bind("route:page", function(page){
         console.log("Page Bind");
-        config.page = "/_sample_kit/page.html";
-        that.preview.update(config);
+        that.preview.page.set("id", "/_sample_kit/page.html");
       })
       
       // Hand off all link events to the Router.

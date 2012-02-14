@@ -26,20 +26,22 @@ define([
     payload : Payload,
 
     initialize : function(attrs){
-
+      this.page = new Page;
+      this.page.bind("change:id", function(){
+        console.log("THE PAGE ID HAS CHANGED TO: "+ this.page.id);
+        this.update();
+      }, this)
     },
     
-    update : function(attrs){
+    update : function(){
       var that = this;
-      
-      this.page = new Page({id : attrs.page });
       this.site = new Site();
       this.navigation = new Navigation();
       this.tags = new Tags();
       this.payload = new Payload();
       
       $.when(
-        this.page.deferred, this.site.deferred,
+        this.page.generate(), this.site.deferred,
         this.navigation.deferred, this.tags.deferred
       ).then(function(){
         that.process();
