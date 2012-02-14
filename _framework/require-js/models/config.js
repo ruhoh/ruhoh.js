@@ -15,17 +15,21 @@ define([
     
     // Internal: Get a normalized, absolute path for the App Session.
     // Normalizes submitted paths into a well-formed url.
+    // Similar to File.join(a, b, c) in ruby.
     // 
-    // path - (Optional) String representing a relative path to an asset.
+    // arguments - (Optional) Takes a variable number of arguments
+    //  representing a path to a particular asset.
     //
     // Returns: String - Normalized absolute URL path to asset.
-    getPath : function(path){
-      if(path)
-        return this.get('basePath')
-          .concat( _.compact(path.split('/')) )
-          .join('/');
-      else
+    getPath : function(){
+      if(arguments.length === 0)
         return this.get('basePath').join('/');
+
+      return this.get('basePath').concat( 
+        _.compact( 
+          Array.prototype.slice.call(arguments).join("/").split('/')
+         )
+      ).join('/');
     },
 
     // Internal : Builds the absolute URL path to assets relative to enabled theme.
@@ -33,11 +37,11 @@ define([
     // path - (Optional) String of a path to an asset.
     // Returns: String - Normalized absolute URL paath to theme assets.
     getThemePath : function(path){
-      return this.getPath(this.get("themePath") + "/" + this.get("theme") + '/' + (path || ""));
+      return this.getPath(this.get("themePath"), this.get("theme"),  path);
     },
     
     getDataPath : function(path){
-      return this.getPath(this.get('dataPath') + '/' + (path || ""));
+      return this.getPath(this.get('dataPath'), path);
     },
     
     // Internal: Normalizes a root domain into a well-formed URL.
