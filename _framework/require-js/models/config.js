@@ -10,7 +10,7 @@ define([
 
     initialize : function(attrs){
       this.set({
-        basePath : this.buildBasePath(window.location.origin + window.location.pathname),
+        basePath : this.buildBasePath(window.location.href),
         theme : (this.getQueryParam('theme') || 'twitter')
       });
     },
