@@ -34,11 +34,11 @@ define([
       
       this.page.bind("change:id", function(){
         console.log("THE PAGE ID HAS CHANGED TO: "+ this.page.id);
-        this.update();
+        this.generate();
       }, this)
     },
     
-    update : function(){
+    generate : function(){
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
