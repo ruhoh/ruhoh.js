@@ -2,18 +2,15 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js-yaml',
 ], function($, _, Backbone){
   
-  // Layout Model
+  // Config Model
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      this.set({
-        basePath : this.buildBasePath(window.location.href),
-        dataPath : '/_framework/sample_kit/',
-        theme : (this.getQueryParam('theme') || 'twitter')
-      });
+      this.set("basePath", (attrs.basePath ? attrs.basePath : window.location.pathname));
+      this.buildBasePath();
+      this.bind("change:basePath", this.buildBasePath, this);
     },
     
     // Internal: Get a normalized, absolute path for the App Session.
@@ -36,7 +33,7 @@ define([
     // path - (Optional) String of a path to an asset.
     // Returns: String - Normalized absolute URL paath to theme assets.
     getThemePath : function(path){
-      return this.getPath("/themes/" + this.get("theme") + '/' + (path || ""));
+      return this.getPath(this.get("themePath") + "/" + this.get("theme") + '/' + (path || ""));
     },
     
     getDataPath : function(path){
@@ -47,10 +44,10 @@ define([
     // 
     // root - (Required) String the root url of the webpage the app loads within.
     // Returns: String - Normalized absolute URL root.
-    buildBasePath : function(root){
-      var nodes = root.split('/');
+    buildBasePath : function(){
+      var nodes = this.get("basePath").split('/');
       if(["", "index.html"].indexOf(_.last(nodes)) !== -1 ) nodes.pop();
-      return nodes;
+      this.set("basePath", nodes);
     },
     
     // Thanks: Amr ElGarhy - http://stackoverflow.com/a/3388227/101940

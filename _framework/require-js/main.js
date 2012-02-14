@@ -14,5 +14,5 @@ require([
   'backbone',
   'app'
 ], function($, _, Backbone, App){
-  App.init();
+  App.init(CONFIG);
 });

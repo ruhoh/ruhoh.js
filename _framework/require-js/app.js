@@ -15,8 +15,9 @@ define([
   
   var App = { 
     
-    init : function(boot){
-      this.preview = new Preview;
+    init : function(appConfig, boot){
+      this.appConfig = appConfig;
+      this.preview = new Preview(null, this.appConfig);
       this.Router = new Router;
       this.initRouting();
 
@@ -47,7 +48,10 @@ define([
       });
       
       // Start Router.
-      Backbone.history.start({pushState: true, root: "/~jade/"});
+      Backbone.history.start({
+        pushState: true, 
+        root: (this.appConfig.basePath ? this.appConfig.basePath : window.location.pathname)
+      });
     }
 
   };

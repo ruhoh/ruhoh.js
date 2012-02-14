@@ -26,7 +26,7 @@ define([
     page : Page,
     payload : Payload,
 
-    initialize : function(attrs){
+    initialize : function(attrs, appConfig){
       this.page = new Page;
       this.page.sub = new Layout;
       this.page.master = new Layout;
@@ -37,7 +37,7 @@ define([
       this.payload = new Payload;
       
       // Set pointers to a single Config.
-      this.config = new Config,
+      this.config = new Config(appConfig),
       this.page.config = this.config,
       this.page.sub.config = this.config,
       this.page.master.config = this.config,
