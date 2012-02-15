@@ -31,10 +31,12 @@ define([
       var that = this;
       
       this.Router.bind("route:home", function(){
+        that.preview.page.clear({silent : true})
         that.preview.page.set("id", "index.html")
       })
       
       this.Router.bind("route:page", function(page){
+        that.preview.page.clear({silent : true})
         that.preview.page.set("id", page);
       })
       
