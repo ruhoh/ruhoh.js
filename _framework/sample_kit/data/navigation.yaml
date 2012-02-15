@@ -11,5 +11,9 @@
   url : /tags.html
   title : Tags
 -
-  url : /about.html
+  url : pages/about.html
   title : About
+
+-
+  url : pages
+  title : Test
