@@ -1,6 +1,7 @@
 define([
-  'js-yaml',  
-], function(){
+  'utils/log',
+  'yaml'
+], function(Log){
   
   return {
     
@@ -8,9 +9,9 @@ define([
     FMregex : /^---\n(.|\n)*---\n/,
     
     // Parse and store the YAML Front Matter from the file.
-    frontMatter : function(content){
+    frontMatter : function(content, file){
       var front_matter = this.FMregex.exec(content);
-      if(!front_matter) throw("INVALID FRONT MATTER");
+      if(!front_matter) Log.parseError(file, "Invalid YAML Front Matter");
       front_matter = front_matter[0].replace(/---\n/g, "");
       return this.tags(jsyaml.load(front_matter) || {});
     },
