@@ -48,7 +48,6 @@ define([
       this.payload.config = this.config;
 
       this.page.bind("change:id", function(){
-        console.log("THE PAGE ID HAS CHANGED TO: "+ this.page.id);
         this.generate();
       }, this)
     },

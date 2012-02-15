@@ -23,7 +23,6 @@ define([
     // Returns: jQuery Deferred object. This ensures all despendencies
     //   are resolved before the generate promise is kept.
     generate : function(){
-      console.log("generating page");
       var that = this;
 
       return this.fetch({dataType : "html", cache : false}).pipe(function(){
