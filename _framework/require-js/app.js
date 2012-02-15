@@ -31,18 +31,16 @@ define([
       var that = this;
       
       this.Router.bind("route:home", function(){
-        console.log("Home Bind");
         that.preview.page.set("id", "index.html")
       })
       
       this.Router.bind("route:page", function(page){
-        console.log("Page Bind");
         that.preview.page.set("id", page);
       })
       
       // Hand off all link events to the Router.
       $("body").find('a').live("click", function(e){
-        that.Router.navigate(this.href.split("/").pop(), {trigger: true})
+        that.Router.navigate($(this).attr("href"), {trigger: true});
         e.preventDefault();
         return false;
       });

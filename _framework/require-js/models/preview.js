@@ -74,8 +74,8 @@ define([
       this.payload.set({
         "site" : this.site.attributes,
         "ASSET_PATH" : this.config.getThemePath(),
-        "HOME_PATH" : this.config.getPath(),
-        "BASE_PATH" : this.config.getPath(),
+        "HOME_PATH" : "/",
+        "BASE_PATH" : "",
         "navigation" : this.navigation.get("data"),
         "tags" : this.tags.get("data"),
         "page" : this.page.attributes,
