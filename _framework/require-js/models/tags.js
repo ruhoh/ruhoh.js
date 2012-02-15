@@ -2,9 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'utils/parse',
   'utils/log',
   'yaml',  
-], function($, _, Backbone, Log){
+], function($, _, Backbone, Parse, Log){
   
   // Tags Model
   // Perhaps this should be a collection but we don't
@@ -24,7 +25,7 @@ define([
     },
     
     parse : function(response){
-      this.set("data", jsyaml.load(response));
+      this.set("data", Parse.tags(jsyaml.load(response)));
       return this.attributes;
     }
     

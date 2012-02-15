@@ -2,24 +2,42 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'utils/log'
-], function($, _, Backbone, Log){
+  'models/tags',
+  'utils/log',
+  'yaml'
+], function($, _, Backbone, Tags, Log){
   
   // Site Model
   return Backbone.Model.extend({
+    tags : Tags,
     
     initialize : function(attrs){
-
+      this.set({
+        time : new Date().toString(),
+        posts : [],
+        pages : [],
+        categories : [],
+      })
     },
     
     generate : function(){
-      return this.fetch({ cache : false });
+      var that = this;
+      return this.fetch({ dataType: "html", cache : false }).pipe(function(){
+        return that.tags.generate().done(function(){
+          that.set("tags", that.tags.get("data"))
+        })
+      })
     },
 
     url : function(){
-      return this.config.getDataPath('/data/site.json');
+      return this.config.getDataPath('/data/_config.yml');
+    },
+
+    parse : function(response){
+      this.set(jsyaml.load(response));
+      return this.attributes;
     }
-    
+
   });
 
 });

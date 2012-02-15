@@ -28,23 +28,24 @@ define([
     payload : Payload,
 
     initialize : function(attrs, appConfig){
+      this.config = new Config(appConfig);
+
       this.page = new Page;
       this.page.sub = new Layout;
       this.page.master = new Layout;
       
       this.site = new Site;
+      this.site.tags = new Tags;
       this.navigation = new Navigation;
-      this.tags = new Tags;
       this.payload = new Payload;
       
       // Set pointers to a single Config.
-      this.config = new Config(appConfig),
       this.page.config = this.config,
       this.page.sub.config = this.config,
       this.page.master.config = this.config,
       this.site.config = this.config,
+      this.site.tags.config = this.config,
       this.navigation.config = this.config,
-      this.tags.config = this.config,
       this.payload.config = this.config;
 
       this.page.bind("change:id", function(){
@@ -56,34 +57,39 @@ define([
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
-        this.navigation.generate(), this.tags.generate()
+        this.navigation.generate()
       ).done(function(){
+        that.buildPayload();
         that.process();
       }).fail(function(jqxhr){
         Log.loadError(this, jqxhr)
       });
     },
     
-    // - Build the payload.
-    // - Process sub and master templates.
-    // - Render the result.
-    process : function(){
-
+    // Build the payload.
+    buildPayload : function(){
       this.payload.set({
         "site" : this.site.attributes,
+        "navigation" : this.navigation.get("data"),
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",
         "BASE_PATH" : "",
-        "navigation" : this.navigation.get("data"),
-        "tags" : this.tags.get("data"),
-        "page" : this.page.attributes,
-        // Set page content as {{content}} for sub-template.
-        "content" : this.page.get("content")
-      });
+        "page" : this.page.attributes
+      })
+    },
+    
+    // Public: Process content, sub+master templates then render the result.
+    //  
+    // TODO: Include YAML Front Matter from the templates.
+    // Returns: Nothing. The finished preview is rendered in the Browser.
+    process : function(){
+      // Process the page/post content first.
+      // Then set the result as {{content}} for sub-template.
+      var output = $.mustache(this.page.get("content"), this.payload.attributes);
+      this.payload.set("content", output);
       
-
-      // Process the page/post+sub-template
-      var output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
+      // Process the page/post output into sub-template.
+      output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
       
       // An undefined master means the page/post layouts is only one deep.
       // This means it expects to load directly into a master template.
