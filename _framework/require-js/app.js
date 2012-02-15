@@ -2,16 +2,17 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'router',
+  'models/config',
+  'models/preview',
   'models/page',
   'models/layout',
   'models/payload',
-  'models/preview',
-  'models/config',
-  'parse',
-  'router',
-  'js-yaml',
+  'utils/parse',
+  'utils/log',
+  'yaml',
   'mustache',
-], function($, _, Backbone, Page, Layout, Payload, Preview, Config, Parse, Router){
+], function($, _, Backbone, Router, Config, Preview, Page, Layout, Payload, Parse, Log){
   
   var App = { 
     

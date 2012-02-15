@@ -2,9 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'parse',
-  'js-yaml',
-], function($, _, Backbone, Parse){
+  'utils/parse',
+  'utils/log',
+  'yaml',
+], function($, _, Backbone, Parse, Log){
   
   // Layout Model
   return Backbone.Model.extend({
@@ -22,7 +23,7 @@ define([
     },
     
     parse : function(data){
-      this.set(Parse.frontMatter(data));
+      this.set(Parse.frontMatter(data, this.url()));
       this.set("content", Parse.content(data));
       return this.attributes;
     }

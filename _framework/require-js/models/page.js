@@ -4,9 +4,10 @@ define([
   'backbone',
   'models/layout',
   'models/config',
-  'parse',
-  'js-yaml',
-], function($, _, Backbone, Layout, Config, Parse){
+  'utils/parse',
+  'utils/log',
+  'yaml',
+], function($, _, Backbone, Layout, Config, Parse, Log){
 
   // Page Model 
   // Represents a post or page.
@@ -26,7 +27,8 @@ define([
       var that = this;
 
       return this.fetch({dataType : "html", cache : false}).pipe(function(){
-        if(!that.get("layout")) throw("Page/Post requires a valid layout setting. (e.g. layout: post) ");
+        if(!that.get("layout")) 
+          Log.parseError(that.url(), "Page/Post requires a valid layout setting. (e.g. layout: post)")
         
         that.sub.set("id", that.get("layout"));
         return that.sub.generate().pipe(function(){
@@ -35,8 +37,8 @@ define([
             return that.master.generate();
           }
         })
-      }).fail(function(a, status, message){
-        throw(status + ": " + message + ": " + this.url);
+      }).fail(function(jqxhr){
+        Log.loadError(this, jqxhr)
       })
     },
     
@@ -46,7 +48,7 @@ define([
 
     // Parse the raw page/post file.
     parse : function(data){ 
-      this.set(Parse.frontMatter(data));
+      this.set(Parse.frontMatter(data, this.url()));
       this.set("content", Parse.content(data));
       return this.attributes;
     }

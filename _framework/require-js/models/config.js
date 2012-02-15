@@ -2,7 +2,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-], function($, _, Backbone){
+  'utils/log'
+], function($, _, Backbone, Log){
   
   // Config Model
   return Backbone.Model.extend({

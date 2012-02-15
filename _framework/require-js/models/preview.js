@@ -2,15 +2,16 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/layout',
+  'models/config',
   'models/page',
+  'models/layout',
   'models/site',
   'models/navigation',
   'models/tags',
   'models/payload',
-  'models/config',
+  'utils/log',
   'mustache'
-], function($, _, Backbone, Layout, Page, Site, Navigation, Tags, Payload, Config){
+], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log){
 
   // Preview object builds a preview of a given page/post
   //
@@ -57,12 +58,10 @@ define([
       $.when(
         this.page.generate(), this.site.generate(),
         this.navigation.generate(), this.tags.generate()
-      ).then(function(){
+      ).done(function(){
         that.process();
-      }, function(a, status, message){
-        var response = status + ": " + message;
-        $("body").html('<h2>'+ response +'</h2><p>'+ this.url +'</p');
-        throw(response + ": " + this.url);
+      }).fail(function(jqxhr){
+        Log.loadError(this, jqxhr)
       });
     },
     

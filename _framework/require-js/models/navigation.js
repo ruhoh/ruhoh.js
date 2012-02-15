@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js-yaml',  
-], function($, _, Backbone){
+  'utils/log',
+  'yaml',  
+], function($, _, Backbone, Log){
   
   // Navigation Model
   return Backbone.Model.extend({

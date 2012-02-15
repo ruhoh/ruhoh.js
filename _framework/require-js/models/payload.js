@@ -2,7 +2,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-], function($, _, Backbone){
+  'utils/log'
+], function($, _, Backbone, Log){
   
   // Payload Model
   // payload is the data structure available to the templates via Mustache.

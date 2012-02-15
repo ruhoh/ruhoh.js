@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js-yaml',  
-], function($, _, Backbone){
+  'utils/log',
+  'yaml',  
+], function($, _, Backbone, Log){
   
   // Tags Model
   // Perhaps this should be a collection but we don't
