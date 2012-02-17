@@ -6,7 +6,6 @@ define([
   'models/page',
   'models/layout',
   'models/site',
-  'models/navigation',
   'models/tags',
   'models/payload',
   'dictionaries/pages',
@@ -14,7 +13,7 @@ define([
   'handlebars',
   'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, PagesDictionary, Log, Handlebars, Partials){
+], function($, _, Backbone, Config, Page, Layout, Site, Tags, Payload, PagesDictionary, Log, Handlebars, Partials){
 
   TemplateEngine = "Handlebars";
   
@@ -41,7 +40,6 @@ define([
       
       this.site = new Site;
       this.site.tags = new Tags;
-      this.navigation = new Navigation;
       this.payload = new Payload;
       this.pagesDictionary = new PagesDictionary;
 
@@ -51,7 +49,6 @@ define([
       this.page.master.config = this.config,
       this.site.config = this.config,
       this.site.tags.config = this.config,
-      this.navigation.config = this.config,
       this.payload.config = this.config,
       Partials.config = this.config;
       this.pagesDictionary.config = this.config;
@@ -66,8 +63,7 @@ define([
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
-        this.navigation.generate(), Partials.generate(),
-        this.pagesDictionary.generate()
+        Partials.generate(), this.pagesDictionary.generate()
       ).done(function(){
         that.buildPayload();
         that.process();
@@ -81,7 +77,6 @@ define([
       this.payload.set({
         "pages" : this.pagesDictionary.attributes,
         "site" : this.site.attributes,
-        "navigation" : this.navigation.get("data"),
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",
         "BASE_PATH" : "",
