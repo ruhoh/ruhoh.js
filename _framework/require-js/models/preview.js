@@ -13,7 +13,7 @@ define([
   'handlebars',
   'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log, Handlebars){
+], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log, Handlebars, Partials){
 
   TemplateEngine = "Handlebars";
   
@@ -50,7 +50,8 @@ define([
       this.site.config = this.config,
       this.site.tags.config = this.config,
       this.navigation.config = this.config,
-      this.payload.config = this.config;
+      this.payload.config = this.config,
+      Partials.config = this.config;
 
       this.page.bind("change:id", function(){
         this.generate();
@@ -61,7 +62,7 @@ define([
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
-        this.navigation.generate()
+        this.navigation.generate(), Partials.generate()
       ).done(function(){
         that.buildPayload();
         that.process();
