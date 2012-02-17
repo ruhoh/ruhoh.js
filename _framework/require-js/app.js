@@ -10,10 +10,10 @@ define([
   'models/payload',
   'utils/parse',
   'utils/log',
+  'handlebars',
   'yaml',
-  'mustache',
-], function($, _, Backbone, Router, Config, Preview, Page, Layout, Payload, Parse, Log){
-  
+], function($, _, Backbone, Router, Config, Preview, Page, Layout, Payload, Parse, Log, Handlebars){
+
   var App = { 
     
     init : function(appConfig, boot){

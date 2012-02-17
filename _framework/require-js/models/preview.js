@@ -10,9 +10,13 @@ define([
   'models/tags',
   'models/payload',
   'utils/log',
-  'mustache'
-], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log){
+  'handlebars',
+  'partials',
+  'helpers',
+], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log, Handlebars){
 
+  TemplateEngine = "Handlebars";
+  
   // Preview object builds a preview of a given page/post
   //
   // There is only ever one preview at any given time.
@@ -77,24 +81,53 @@ define([
         "page" : this.page.attributes
       })
     },
+
+    process : function(){
+      this[TemplateEngine]();
+    },
     
     // Public: Process content, sub+master templates then render the result.
     //  
     // TODO: Include YAML Front Matter from the templates.
     // Returns: Nothing. The finished preview is rendered in the Browser.
-    process : function(){
+    Handlebars : function(){
       // Process the page/post content first.
-      // Then set the result as {{content}} for sub-template.
-      var output = $.mustache(this.page.get("content"), this.payload.attributes);
+      var template = Handlebars.compile(this.page.get("content"));
+      var output = template(this.payload.attributes);
       this.payload.set("content", output);
       
       // Process the page/post output into sub-template.
-      output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
+      template = Handlebars.compile(this.page.sub.get("content"));
+      output = template(this.payload.attributes);
       
       // An undefined master means the page/post layouts is only one deep.
       // This means it expects to load directly into a master template.
       if(this.page.master.id){
-        
+        this.payload.set("content", output);
+        template = Handlebars.compile(this.page.master.get("content"));
+        output = template(this.payload.attributes);
+      }
+      
+      $("body").html(output);
+    },
+    
+    // Public: Process content, sub+master templates then render the result.
+    //  
+    // TODO: Include YAML Front Matter from the templates.
+    // Returns: Nothing. The finished preview is rendered in the Browser.
+    Mustache : function(){
+      // Process the page/post content first.
+      // Then set the result as {{content}} for sub-template.
+      var output = $.mustache(this.page.get("content"), this.payload.attributes);
+      this.payload.set("content", output);
+
+      // Process the page/post output into sub-template.
+      output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
+
+      // An undefined master means the page/post layouts is only one deep.
+      // This means it expects to load directly into a master template.
+      if(this.page.master.id){
+
         // Set processed *page/post+sub-template* as content for master-template.
         this.payload.set("content", output);
 
@@ -102,9 +135,10 @@ define([
         // Render the result into the browser.
         output = $.mustache(this.page.master.get("content"), this.payload.attributes);
       }
-      
+
       $("body").html(output);
     }
+    
   
   });
   
