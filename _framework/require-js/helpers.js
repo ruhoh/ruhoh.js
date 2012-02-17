@@ -31,13 +31,28 @@ define([
     return b;
   });
   
+  // Public: Iterate through a list of pages.
+  // TODO: setting any variables in the pages dictionary will alter the dictionary.
+  //   Consider deep-cloning each page object.
+  //   It works now because the dictionary is renewed on every preview generation.
+  //
+  // context - (Optional) - [Array] 
+  //   Pass an array of page ids (urls)
+  //   The ids are expanded into objects from the page dictionary.
+  //   If there is no context, we assume the pages dictionary.
+  //
+  // Returns: Parsed HTML template.
   Handlebars.registerHelper('pages_list', function(context, block) {
     console.log("pages_list block");
-    var template = block.fn;
+    var template = block ? block.fn : context.fn;
+    var pages = _.isArray(context) 
+      ? _.map( context, function(url){ return this.pages[url] }, this)
+      : this.pages;
+
     var cache = '';
-    _.each(context, function(data){
-      if(this.page.id.replace(/^\//,'') === data.url.replace(/^\//,'')) data.isActivePage = true;
-      cache += template(data);
+    _.each(pages, function(page){
+      if(this.page.id.replace(/^\//,'') === page.url.replace(/^\//,'')) page.isActivePage = true;
+      cache += template(page);
     }, this);
     
     return new Handlebars.SafeString(cache);

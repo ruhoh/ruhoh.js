@@ -9,11 +9,12 @@ define([
   'models/navigation',
   'models/tags',
   'models/payload',
+  'dictionaries/pages',
   'utils/log',
   'handlebars',
   'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, Log, Handlebars, Partials){
+], function($, _, Backbone, Config, Page, Layout, Site, Navigation, Tags, Payload, PagesDictionary, Log, Handlebars, Partials){
 
   TemplateEngine = "Handlebars";
   
@@ -42,7 +43,8 @@ define([
       this.site.tags = new Tags;
       this.navigation = new Navigation;
       this.payload = new Payload;
-      
+      this.pagesDictionary = new PagesDictionary;
+
       // Set pointers to a single Config.
       this.page.config = this.config,
       this.page.sub.config = this.config,
@@ -52,6 +54,8 @@ define([
       this.navigation.config = this.config,
       this.payload.config = this.config,
       Partials.config = this.config;
+      this.pagesDictionary.config = this.config;
+
 
       this.page.bind("change:id", function(){
         this.generate();
@@ -62,7 +66,8 @@ define([
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
-        this.navigation.generate(), Partials.generate()
+        this.navigation.generate(), Partials.generate(),
+        this.pagesDictionary.generate()
       ).done(function(){
         that.buildPayload();
         that.process();
@@ -74,6 +79,7 @@ define([
     // Build the payload.
     buildPayload : function(){
       this.payload.set({
+        "pages" : this.pagesDictionary.attributes,
         "site" : this.site.attributes,
         "navigation" : this.navigation.get("data"),
         "ASSET_PATH" : this.config.getThemePath(),

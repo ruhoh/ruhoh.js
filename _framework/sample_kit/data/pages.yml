@@ -1,0 +1,45 @@
+"about.html" : 
+  url : about.html
+  layout : page
+  title : "About This Site"
+  tagline : Some stuff about the about page.
+
+"archive.html" :
+  url : archive.html
+  layout: page
+  title : Archive
+  header : Post Archive
+  group: navigation  
+
+"categories.html" :
+  url : categories.html
+  layout: page
+  title: Categories
+  header: Posts By Category
+  group: navigation
+
+"pages.html" :
+  url : pages.html
+  layout: page
+  title: Pages 
+  header: Pages
+  group: navigation
+
+"pages/about.html" :
+  url : pages/about.html
+  layout : page
+  title : "About This Site"
+  tagline : Some stuff about the about page.
+
+"pages" :
+  url : pages
+  layout : post
+  title : A cool index page
+  tagline : Do it
+  
+"tags.html" :
+  url : tags.html
+  layout: page
+  title: Tags
+  header: Posts By Tag
+  group: navigation
