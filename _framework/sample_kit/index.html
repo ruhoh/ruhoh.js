@@ -2,7 +2,99 @@
 layout : page
 title : Home Page
 tagline : The sample kit homepage
+
+posts_collated : 
+  - 
+    year : 2011
+    months :
+     - 
+       month : December
+       posts :
+         - 
+           title : "A friendly blog post"
+           url : /doit.html
+           date : November 30, 2011
+     -
+       month : February
+       posts :
+         - 
+          title : Valentines day
+          url : /vday.html
+          date : November 30, 2011
+  - 
+    year : 2010
+    months :
+      -
+        month : February
+        posts :
+          - 
+           title : unvalentines day
+           url : meep.html
+           date : November 30, 2011
 ---
+
+<h3>JB/analytics</h3>
+{{{analytics}}}
+<pre><code>{% include JB/analytics %}</code></pre>
+
+<h3>JB/categories_list</h3>
+
+
+<h3>JB/comments</h3>
+{{{comments}}}
+<pre><code>{% include JB/comments %}</code></pre>
+
+
+<h3>JB/pages_list</h3>
+<ul>
+{{#pages_list navigation}}
+  {{> pages_list }}
+{{/pages_list}}  
+</ul>
+
+<pre><code>{% assign pages_list = site.pages %}
+{% assign group = 'navigation' %}
+{% include JB/pages_list %}</code></pre>
+
+
+<h3>JB/posts_collate</h3>
+{{#posts_collate page.posts_collated}}
+<h2>{{year}}</h2>
+{{#months}}
+  <h3>{{month}}</h3>
+  <ul>
+    {{#posts}}
+    <li><span>{{date}}</span> &raquo; <a href="{{url}}">{{title}}</a></li>
+    {{/posts}}
+  </ul>
+{{/months}}
+{{/posts_collate}}
+
+<pre><code>{% assign posts_collate = site.posts %}
+{% include JB/posts_collate %}</code></pre>
+
+
+<h3>JB/setup</h3>
+<ul>
+  <li>ASSET_PATH : {{ASSET_PATH}}</li>
+  <li>HOME_PATH : {{HOME_PATH}}</li>
+  <li>BASE_PATH : {{BASE_PATH}}</li>
+</ul>
+<h3>JB/sharing</h3>
+not implemented (same as comments/analytics)
+
+<h3>JB/tags_list</h3>
+<ul class="tag_box inline">
+{{#tags_list site.tags}}
+  {{> tags_list }}
+{{/tags_list }}
+</ul>
+<pre><code>{% assign pages_list = site.pages %}
+{% assign group = 'navigation' %}
+{% include JB/pages_list %}</code></pre>
+
+
+
 
 <p>Read <a href='http://jekyllbootstrap.com/usage/jekyll-quick-start.html'>Jekyll Quick Start</a></p>
 

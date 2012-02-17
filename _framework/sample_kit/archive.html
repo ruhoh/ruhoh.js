@@ -3,13 +3,45 @@ layout: page
 title : Archive
 header : Post Archive
 group: navigation
+
+posts_collated : 
+  - 
+    year : 2011
+    months :
+     - 
+       month : December
+       posts :
+         - 
+           title : "A friendly blog post"
+           url : /doit.html
+           date : December 30, 2011
+         - 
+           title : "something"
+           url : /doit.html
+           date : December 30, 2011           
+         - 
+           title : "rando"
+           url : /doit.html
+           date : December 30, 2011           
+     -
+       month : February
+       posts :
+         - 
+          title : Valentines day
+          url : /vday.html
+          date : February 30, 2011
+  - 
+    year : 2010
+    months :
+      -
+        month : February
+        posts :
+          - 
+           title : unvalentines day
+           url : meep.html
+           date : February 30, 2010
 ---
 
-<h2>2011</h2>
-<h3>December</h3>
-<ul>
-  <li><span>December 29, 2011</span> &raquo; <a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
-
-
-
+{{#posts_collate page.posts_collated}}
+  {{>posts_collate}}
+{{/posts_collate}}
