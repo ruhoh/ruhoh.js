@@ -1,0 +1,15 @@
+'fruits.html' :
+  url : fruits.html
+  date : 2012/1/01
+  layout : post
+  title : "How to eat fruit."
+  category : lessons
+  tags : [apple,  banana, lemon]
+  
+'hello-world.html' :
+  url : hello-world.html
+  date : 2011/12/01
+  layout : post
+  title : "Hello World =)!"
+  category : lessons
+  tags : [intro, beginner, jekyll, tutorial]
