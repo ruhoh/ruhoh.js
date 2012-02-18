@@ -43,7 +43,12 @@ define([
       
       // Hand off all link events to the Router.
       $("body").find('a').live("click", function(e){
-        that.Router.navigate($(this).attr("href"), {trigger: true});
+
+        var url = ( $(this).attr('rel') === "post" )
+          ? ( '_posts/' + $(this).attr("href") )
+          : $(this).attr("href");
+          
+        that.Router.navigate(url, {trigger: true});
         e.preventDefault();
         return false;
       });
