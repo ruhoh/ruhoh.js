@@ -6,7 +6,6 @@ define([
   'models/page',
   'models/layout',
   'models/site',
-  'models/tags',
   'models/payload',
   'dictionaries/pages',
   'dictionaries/posts',
@@ -14,7 +13,7 @@ define([
   'handlebars',
   'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Tags, Payload, PagesDictionary, PostsDictionary, Log, Handlebars, Partials){
+], function($, _, Backbone, Config, Page, Layout, Site, Payload, PagesDictionary, PostsDictionary, Log, Handlebars, Partials){
 
   TemplateEngine = "Handlebars";
   
@@ -40,7 +39,6 @@ define([
       this.page.master = new Layout;
       
       this.site = new Site;
-      this.site.tags = new Tags;
       this.payload = new Payload;
       this.pagesDictionary = new PagesDictionary;
       this.postsDictionary = new PostsDictionary;
@@ -50,7 +48,6 @@ define([
       this.page.sub.config = this.config,
       this.page.master.config = this.config,
       this.site.config = this.config,
-      this.site.tags.config = this.config,
       this.payload.config = this.config,
       Partials.config = this.config;
       this.pagesDictionary.config = this.config;
@@ -78,6 +75,8 @@ define([
     
     // Build the payload.
     buildPayload : function(){
+      this.site.set("tags", this.postsDictionary.tags);
+      
       this.payload.set({
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,

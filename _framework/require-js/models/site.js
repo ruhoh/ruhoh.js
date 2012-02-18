@@ -21,12 +21,7 @@ define([
     },
     
     generate : function(){
-      var that = this;
-      return this.fetch({ dataType: "html", cache : false }).pipe(function(){
-        return that.tags.generate().done(function(){
-          that.set("tags", that.tags.get("data"))
-        })
-      })
+      return this.fetch({ dataType: "html", cache : false })
     },
 
     url : function(){

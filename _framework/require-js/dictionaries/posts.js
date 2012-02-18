@@ -42,8 +42,34 @@ define([
         return post.url;
       })
       
+      this.parseTags();
+
       return this.attributes;
+    },
+    
+    parseTags : function(){
+      var tagsHash = {}
+      var tags = [];
+      
+      _.each(this.attributes, function(post){
+        _.each(post.tags, function(tag){
+          if( tagsHash.hasOwnProperty(tag) )
+            tagsHash[tag] += 1;
+          else
+            tagsHash[tag] = 1;
+        })
+      })
+      
+      for(tag in tagsHash){
+        tags.push({
+          name : tag,
+          count : tagsHash[tag]
+        })
+      }
+
+      this.tags = tags;
     }
+    
     
   });
 
