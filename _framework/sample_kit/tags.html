@@ -5,28 +5,22 @@ header: Posts By Tag
 group: navigation
 ---
 
+<p>
+  The posts listings should work with 'posts_list' helper
+  so we can fetch the post objects. To do this I need to
+  look into Handlebars more.
+</p>
+
+
 <ul class="tag_box inline">
-{{#site.tags}}
-  <li><a href="{{ BASE_PATH }}{{ site.JB.tags_path }}#{{ name }}-ref">{{ name }} <span>{{ count }}</span></a></li>
-{{/site.tags}}
+{{#tags_list}}
+  {{>tags_list}}
+{{/tags_list}}
 </ul>
 
-<h2 id="intro-ref">intro</h2>
-<ul>
-  <li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
-
-<h2 id="beginner-ref">beginner</h2>
-<ul>
-  <li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
-
-<h2 id="jekyll-ref">jekyll</h2>
-<ul>
-  <li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
-
-<h2 id="tutorial-ref">tutorial</h2>
-<ul>
-  <li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
+{{#tags_list}}
+  <h2 id="{{name}}-ref">{{name}}</h2>
+  {{#posts}}
+    <li><a href="{{.}}" rel="post">{{.}}</a></li>
+  {{/posts}}
+{{/tags_list}}
