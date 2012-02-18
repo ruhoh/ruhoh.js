@@ -111,11 +111,11 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
-  Handlebars.registerHelper('posts_collate', function(context, block) {
+  Handlebars.registerHelper('posts_collate', function(block) {
     console.log("posts_collate");
     var template = block.fn;
     var cache = '';
-    _.each(context, function(data){
+    _.each(this._posts_collated, function(data){
       cache += template(data);
     }, this);
     
