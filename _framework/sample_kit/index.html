@@ -2,35 +2,6 @@
 layout : page
 title : Home Page
 tagline : The sample kit homepage
-
-posts_collated : 
-  - 
-    year : 2011
-    months :
-     - 
-       month : December
-       posts :
-         - 
-           title : "A friendly blog post"
-           url : /doit.html
-           date : November 30, 2011
-     -
-       month : February
-       posts :
-         - 
-          title : Valentines day
-          url : /vday.html
-          date : November 30, 2011
-  - 
-    year : 2010
-    months :
-      -
-        month : February
-        posts :
-          - 
-           title : unvalentines day
-           url : meep.html
-           date : November 30, 2011
 ---
 
 <h3>posts_list</h3>
@@ -65,7 +36,7 @@ posts_collated :
 
 
 <h3>JB/posts_collate</h3>
-{{#posts_collate page.posts_collated}}
+{{#posts_collate}}
 <h2>{{year}}</h2>
 {{#months}}
   <h3>{{month}}</h3>
