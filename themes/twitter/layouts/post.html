@@ -12,26 +12,26 @@ layout : default
     <hr>
     <div class="pagination">
       <ul>
-        <!--
-        {% if page.previous %}
-          <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Previous</a></li>
-        {% else %}
+        {{#page.previous}}
+          <li class="prev"><a href="{{ url }}" title="{{ title }}" rel="post">&larr; Previous</a></li>
+        {{/page.previous}}
+        {{^page.previous}}
           <li class="prev disabled"><a>&larr; Previous</a></li>
-        {% endif %}
+        {{/page.previous}}
+        
           <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
-        {% if page.next %}
-          <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &rarr;</a></li>
-        {% else %}
+       
+        {{#page.next}}
+          <li class="next"><a href="{{ url }}" title="{{ title }}" rel="post">Next &rarr;</a></li>
+        {{/page.next}}
+        {{^page.next}}
           <li class="next disabled"><a>Next &rarr;</a>
-        {% endif %}
-        -->
-        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Previous</a></li>
-        <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
-        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &rarr;</a></li>
+        {{/page.next}}
+
       </ul>
     </div>
     <hr>
-    {% include JB/comments %}
+    {{{comments}}}
   </div>
   
   <div class="span4">

@@ -77,6 +77,14 @@ define([
     buildPayload : function(){
       this.site.set("tags", this.postsDictionary.tags);
       
+      // Quick hack to set prev/next posts
+      var position = this.postsDictionary.chronological.indexOf(this.page.get("url"))
+      if(position !== -1)
+        this.page.set({
+          "next" : this.postsDictionary.get(this.postsDictionary.chronological[position+1]),
+          "previous" : this.postsDictionary.get(this.postsDictionary.chronological[position-1])
+        })
+      
       this.payload.set({
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,
