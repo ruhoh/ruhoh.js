@@ -9,11 +9,12 @@ define([
   'models/tags',
   'models/payload',
   'dictionaries/pages',
+  'dictionaries/posts',
   'utils/log',
   'handlebars',
   'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Tags, Payload, PagesDictionary, Log, Handlebars, Partials){
+], function($, _, Backbone, Config, Page, Layout, Site, Tags, Payload, PagesDictionary, PostsDictionary, Log, Handlebars, Partials){
 
   TemplateEngine = "Handlebars";
   
@@ -42,6 +43,7 @@ define([
       this.site.tags = new Tags;
       this.payload = new Payload;
       this.pagesDictionary = new PagesDictionary;
+      this.postsDictionary = new PostsDictionary;
 
       // Set pointers to a single Config.
       this.page.config = this.config,
@@ -52,6 +54,7 @@ define([
       this.payload.config = this.config,
       Partials.config = this.config;
       this.pagesDictionary.config = this.config;
+      this.postsDictionary.config = this.config;
 
 
       this.page.bind("change:id", function(){
@@ -63,7 +66,8 @@ define([
       var that = this;
       $.when(
         this.page.generate(), this.site.generate(),
-        Partials.generate(), this.pagesDictionary.generate()
+        Partials.generate(), this.pagesDictionary.generate(),
+        this.postsDictionary.generate()
       ).done(function(){
         that.buildPayload();
         that.process();
@@ -76,6 +80,8 @@ define([
     buildPayload : function(){
       this.payload.set({
         "pages" : this.pagesDictionary.attributes,
+        "_posts" : this.postsDictionary.attributes,
+        "_posts_chronological" : this.postsDictionary.chronological,
         "site" : this.site.attributes,
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",

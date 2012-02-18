@@ -58,6 +58,33 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
+  // Public : Iterate through a list of ordered posts.
+  // Default order is reverse chronological.
+  //
+  // context - (Optional) - [Array] 
+  //   Pass an array of post ids (urls)
+  //   The ids are expanded into objects from the post dictionary.
+  //   If there is no context, we assume the ordered post array from posts dictionary..
+  //
+  // Returns: Parsed HTML template.
+  Handlebars.registerHelper('posts_list', function(context, block) {
+    console.log("posts_list block");
+    var template = block ? block.fn : context.fn;
+    var posts = _.map( 
+      ( _.isArray(context) ? context : this._posts_chronological ),
+      function(url){ return this._posts[url] },
+      this
+    );
+
+    var cache = '';
+    _.each(posts, function(posts){
+      cache += template(posts);
+    }, this);
+    
+    return new Handlebars.SafeString(cache);
+  });
+  
+  
   Handlebars.registerHelper('tags_list', function(context, block) {
     console.log("tags_list");
     var template = block.fn;
