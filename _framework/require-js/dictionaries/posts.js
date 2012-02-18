@@ -47,30 +47,25 @@ define([
       return this.attributes;
     },
     
+    
+    // Create the TagsDictionary
     parseTags : function(){
-      var tagsHash = {}
-      var tags = [];
+      var tags = {}
       
       _.each(this.attributes, function(post){
         _.each(post.tags, function(tag){
-          if( tagsHash.hasOwnProperty(tag) )
-            tagsHash[tag] += 1;
+          if( tags.hasOwnProperty(tag) )
+            tags[tag].count += 1;
           else
-            tagsHash[tag] = 1;
+            tags[tag] = { count : 1, name : tag, posts : [] }
+            
+          tags[tag].posts.push(post.url)  
         })
       })
-      
-      for(tag in tagsHash){
-        tags.push({
-          name : tag,
-          count : tagsHash[tag]
-        })
-      }
 
-      this.tags = tags;
+      this.tagsDictionary = tags;
     }
-    
-    
+
   });
 
 });

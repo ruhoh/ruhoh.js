@@ -87,10 +87,14 @@ define([
   
   Handlebars.registerHelper('tags_list', function(context, block) {
     console.log("tags_list");
-    var template = block.fn;
+    var template = block ? block.fn : context.fn;
+    var tags = _.isArray(context) 
+      ? _.map( context, function(name){ return this._tags[name] }, this)
+      : this._tags;
+
     var cache = '';
-    _.each(context, function(data){
-      cache += template(data);
+    _.each(tags, function(tag){
+      cache += template(tag);
     }, this);
     
     return new Handlebars.SafeString(cache);

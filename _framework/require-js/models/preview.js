@@ -81,6 +81,7 @@ define([
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,
         "_posts_chronological" : this.postsDictionary.chronological,
+        "_tags" : this.postsDictionary.tagsDictionary,
         "site" : this.site.attributes,
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",
