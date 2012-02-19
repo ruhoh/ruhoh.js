@@ -21,7 +21,7 @@ define([
     },
     
     url : function(){
-      return this.config.getDataPath('/data/tags.yaml');
+      return this.config.getDataPath('/_database/tags.yaml');
     },
     
     parse : function(response){

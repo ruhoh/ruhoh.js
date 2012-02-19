@@ -30,7 +30,7 @@ define([
     },
     
     url : function(){
-      return this.config.getDataPath('/data/posts.yml');
+      return this.config.getDataPath('/_database/posts.yml');
     },
 
     parse : function(response){
