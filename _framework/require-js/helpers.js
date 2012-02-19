@@ -6,14 +6,31 @@ define([
   'handlebars',
 ], function($, _, Backbone, Log, Handlebars){
 
+  // Internal: Register debug helper
+  //  debug the passed in data-structure, log to console and output JSON.
+  //
+  // data - Required [Object] The object to debug.
+  //
+  // Examples
+  //
+  //   {{ debug [Object] }}
+  //
+  // Returns: [String] - JSON string of data.
   Handlebars.registerHelper('debug', function(data) {
     console.log("debug:");
     console.log(data);
     return JSON.stringify(data);
   });
   
-  Handlebars.registerHelper('analytics', function(context, block) {
-    console.log("analytics");
+  // Internal: Register analytics helper
+  //  Output analytics code as defined by the configuration settings.
+  //
+  // Examples
+  //
+  //   {{{ analytics }}}
+  //
+  // Returns: [String] - The parsed analytics template.
+  Handlebars.registerHelper('analytics', function() {
     var provider = this.site.JB.analytics.provider;
     if(!provider) throw new Error('Analytics provider must be specified at: "site.JB.analytics.provider"');
     
@@ -22,8 +39,15 @@ define([
       : '<p class="development-notice" style="background:lightblue">'+ provider +' Loaded!</p>';
   });  
   
-  Handlebars.registerHelper('comments', function(context, block) {
-    console.log("comments");
+  // Internal: Register comments helper
+  //  Output comments code as defined by the configuration settings.
+  //
+  // Examples
+  //
+  //   {{{ comments }}}
+  //
+  // Returns: [String] - The parsed comments template.
+  Handlebars.registerHelper('comments', function() {
     var provider = this.site.JB.comments.provider;
     if(!provider) throw new Error('Comment provider must be specified at: "site.JB.comments.provider"');
 
@@ -32,19 +56,23 @@ define([
       : '<p class="development-notice" style="background:orange">'+ provider +' Loaded!</p>';
   });
   
-  // Public: Iterate through a list of pages.
+  // Internal: Register pages_list helper
+  // Iterate through a list of pages.
   // TODO: setting any variables in the pages dictionary will alter the dictionary.
   //   Consider deep-cloning each page object.
   //   It works now because the dictionary is renewed on every preview generation.
   //
-  // context - (Optional) - [Array] 
+  // context - Optional [Array] 
   //   Pass an array of page ids (urls)
   //   The ids are expanded into objects from the page dictionary.
   //   If there is no context, we assume the pages dictionary.
   //
-  // Returns: Parsed HTML template.
+  // Examples
+  //
+  //   {{#pages_list}} ... {{/pages_list}}
+  //
+  // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('pages_list', function(context, block) {
-    console.log("pages_list block");
     var template = block ? block.fn : context.fn;
     var pages = _.isArray(context) 
       ? _.map( context, function(url){ return this.pages[url] }, this)
@@ -59,17 +87,21 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
-  // Public : Iterate through a list of ordered posts.
+  // Internal: Register posts_list helper 
+  // Iterate through a list of ordered posts.
   // Default order is reverse chronological.
   //
-  // context - (Optional) - [Array] 
+  // context - Optional [Array]
   //   Pass an array of post ids (urls)
   //   The ids are expanded into objects from the post dictionary.
   //   If there is no context, we assume the ordered post array from posts dictionary..
   //
-  // Returns: Parsed HTML template.
+  // Examples
+  //
+  //   {{#posts_list}} ... {{/posts_list}}
+  //
+  // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('posts_list', function(context, block) {
-    console.log("posts_list block");
     var template = block ? block.fn : context.fn;
     var posts = _.map( 
       ( _.isArray(context) ? context : this._posts.chronological ),
@@ -85,9 +117,19 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
-  
+  // Internal: Register tags_list helper.
+  // Iterate through a list of tags.
+  //
+  // context - Optional [Array] Pass an array of tag names.
+  //   The names are expanded into objects from the tags dictionary.
+  //   If there is no context, we assume all tags in the dictionary.
+  //
+  // Examples
+  //
+  //   {{#tags_list}} ... {{/tags_list}}
+  //
+  // Returns: [String] - The parsed block content.  
   Handlebars.registerHelper('tags_list', function(context, block) {
-    console.log("tags_list");
     var template = block ? block.fn : context.fn;
     var tags = _.isArray(context) 
       ? _.map( context, function(name){ return this._tags[name] }, this)
@@ -101,8 +143,19 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
+  // Internal: Register categories_list helper.
+  // Iterate through a list of categories.
+  //
+  // context - Optional [Array] Pass an array of category names.
+  //   The names are expanded into objects from the categories dictionary.
+  //   If there is no context, we assume all categories in the dictionary.
+  //
+  // Examples
+  //
+  //   {{#categories_list}} ... {{/categories_list}}
+  //
+  // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('categories_list', function(context, block) {
-    console.log("categories_list");
     var template = block.fn;
     var cache = '';
     _.each(context, function(data){
@@ -112,8 +165,15 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
+  // Internal: Register posts_collate block helper
+  // Collate posts by year and month descending.
+  //
+  // Examples
+  //
+  //   {{#posts_collate }} ... {{/posts_collate}}
+  //
+  // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('posts_collate', function(block) {
-    console.log("posts_collate");
     var template = block.fn;
     var cache = '';
     _.each(this._posts.collated, function(data){

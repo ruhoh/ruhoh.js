@@ -11,10 +11,7 @@ define([
     
     initialize : function(attrs){
       this.set({
-        time : new Date().toString(),
-        posts : [],
-        pages : [],
-        categories : [],
+        time : new Date().toString()
       })
     },
     
