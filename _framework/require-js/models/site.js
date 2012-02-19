@@ -2,14 +2,12 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/tags',
   'utils/log',
   'yaml'
-], function($, _, Backbone, Tags, Log){
+], function($, _, Backbone, Log){
   
   // Site Model
   return Backbone.Model.extend({
-    tags : Tags,
     
     initialize : function(attrs){
       this.set({

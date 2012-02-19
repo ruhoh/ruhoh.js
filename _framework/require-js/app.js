@@ -16,7 +16,6 @@ define([
   'models/payload',
   'models/preview',
   'models/site',
-  'models/tags',
   'models/partial',
 
   'collections/partials',
@@ -26,7 +25,7 @@ define([
   
 ], function($, _, Backbone, Router, Parse, Log, yaml, 
   PagesDictionary, PostsDictionary, 
-  Config, Layout, Page, Payload, Preview, Site, Tags, Partial,
+  Config, Layout, Page, Payload, Preview, Site, Partial,
   Partials,
   Handlebars, helpers){
 
