@@ -1,5 +1,5 @@
 {{#if isActivePage }}
-  <li class="active"><a href="{{url}}" class="active" style="color:red">{{title}}</a></li>
+  <li class="active"><a href="{{url}}" class="active">{{title}}</a></li>
 {{ else }}
   <li><a href="{{url}}">{{title}}</a></li>
 {{/if}}

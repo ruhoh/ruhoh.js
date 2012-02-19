@@ -16,19 +16,20 @@ define([
     console.log("analytics");
     var provider = this.site.JB.analytics.provider;
     if(!provider) throw new Error('Analytics provider must be specified at: "site.JB.analytics.provider"');
-    var a = Handlebars.partials['analytics.'+provider];
-    var b = Handlebars.compile(a)(this);
-    return b;
-    //return new Handlebars.SafeString(Handlebars.partials['analytics.'+provider]);
+    
+    return (this.site.production) 
+      ? Handlebars.compile(Handlebars.partials['analytics.'+provider])(this)
+      : '<p class="development-notice" style="background:lightblue">'+ provider +' Loaded!</p>';
   });  
   
   Handlebars.registerHelper('comments', function(context, block) {
     console.log("comments");
     var provider = this.site.JB.comments.provider;
     if(!provider) throw new Error('Comment provider must be specified at: "site.JB.comments.provider"');
-    var a = Handlebars.partials['comments.'+provider];
-    var b = Handlebars.compile(a)(this);
-    return b;
+
+    return (this.site.production) 
+      ? Handlebars.compile(Handlebars.partials['comments.'+provider])(this)
+      : '<p class="development-notice" style="background:orange">'+ provider +' Loaded!</p>';
   });
   
   // Public: Iterate through a list of pages.
