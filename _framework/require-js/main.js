@@ -2,6 +2,7 @@ require.config({
   baseUrl : "_framework/require-js/",
   urlArgs: "bust=" + (new Date()).getTime(),
   paths : {
+    'jquery' : 'libs/jquery-1.7.1',
     'underscore': 'libs/underscore-1.3.1-amd', // AMD support
     'backbone': 'libs/backbone-0.9.1-amd', // AMD support
     'store': 'libs/backbone-localstorage', // AMD support
@@ -10,11 +11,6 @@ require.config({
   }  
 });
 
-require([
-  'order!jquery',
-  'underscore',
-  'backbone',
-  'app'
-], function($, _, Backbone, App){
+require(['app'], function(App){
   App.init(CONFIG);
 });
