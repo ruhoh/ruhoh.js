@@ -17,15 +17,18 @@ define([
   'models/preview',
   'models/site',
   'models/tags',
+  'models/partial',
+
+  'collections/partials',
 
   'handlebars',
-  'partials',
   'helpers'
   
 ], function($, _, Backbone, Router, Parse, Log, yaml, 
   PagesDictionary, PostsDictionary, 
-  Config, Layout, Page, Payload, Preview, Site, Tags,
-  Handlebars, Partials, helpers){
+  Config, Layout, Page, Payload, Preview, Site, Tags, Partial,
+  Partials,
+  Handlebars, helpers){
 
   var App = { 
     

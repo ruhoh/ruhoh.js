@@ -2,18 +2,27 @@ define([
   'jquery',
   'underscore',
   'backbone',
+
+  'dictionaries/pages',
+  'dictionaries/posts',
+  
   'models/config',
   'models/page',
   'models/layout',
   'models/site',
   'models/payload',
-  'dictionaries/pages',
-  'dictionaries/posts',
+  'models/partial',
+  
+  'collections/partials',
+  
   'utils/log',
   'handlebars',
-  'partials',
   'helpers',
-], function($, _, Backbone, Config, Page, Layout, Site, Payload, PagesDictionary, PostsDictionary, Log, Handlebars, Partials){
+], function($, _, Backbone, 
+  PagesDictionary, PostsDictionary, 
+  Config, Page, Layout, Site, Payload, Partial,
+  Partials,
+  Log, Handlebars){
 
   TemplateEngine = "Handlebars";
   
@@ -42,18 +51,18 @@ define([
       this.payload = new Payload;
       this.pagesDictionary = new PagesDictionary;
       this.postsDictionary = new PostsDictionary;
-
+      this.partials = new Partials;
+      
       // Set pointers to a single Config.
       this.page.config = this.config,
       this.page.sub.config = this.config,
       this.page.master.config = this.config,
       this.site.config = this.config,
       this.payload.config = this.config,
-      Partials.config = this.config;
-      this.pagesDictionary.config = this.config;
+      this.partials.config = this.config,
+      this.pagesDictionary.config = this.config,
       this.postsDictionary.config = this.config;
-
-
+      
       this.page.bind("change:id", function(){
         this.generate();
       }, this)
@@ -62,8 +71,10 @@ define([
     generate : function(){
       var that = this;
       $.when(
-        this.page.generate(), this.site.generate(),
-        Partials.generate(), this.pagesDictionary.generate(),
+        this.page.generate(), 
+        this.site.generate(),
+        this.partials.generate(),
+        this.pagesDictionary.generate(),
         this.postsDictionary.generate()
       ).done(function(){
         that.buildPayload();
