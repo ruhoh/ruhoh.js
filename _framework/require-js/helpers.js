@@ -71,8 +71,8 @@ define([
     console.log("posts_list block");
     var template = block ? block.fn : context.fn;
     var posts = _.map( 
-      ( _.isArray(context) ? context : this._posts_chronological ),
-      function(url){ return this._posts[url] },
+      ( _.isArray(context) ? context : this._posts.chronological ),
+      function(url){ return this._posts.dictionary[url] },
       this
     );
 
@@ -115,7 +115,7 @@ define([
     console.log("posts_collate");
     var template = block.fn;
     var cache = '';
-    _.each(this._posts_collated, function(data){
+    _.each(this._posts.collated, function(data){
       cache += template(data);
     }, this);
     

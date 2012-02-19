@@ -89,24 +89,22 @@ define([
       this.site.set("tags", this.postsDictionary.tags);
       
       // Quick hack to set prev/next posts
-      var position = this.postsDictionary.chronological.indexOf(this.page.get("url"))
+      var position = this.postsDictionary.get('chronological').indexOf(this.page.get("url"))
       if(position !== -1)
         this.page.set({
-          "next" : this.postsDictionary.get(this.postsDictionary.chronological[position+1]),
-          "previous" : this.postsDictionary.get(this.postsDictionary.chronological[position-1])
+          "next" : this.postsDictionary.get('dictionary')[this.postsDictionary.get('chronological')[position+1]],
+          "previous" : this.postsDictionary.get('dictionary')[this.postsDictionary.get('chronological')[position-1]]
         })
       
       this.payload.set({
+        "site" : this.site.attributes,
+        "page" : this.page.attributes,
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,
-        "_posts_chronological" : this.postsDictionary.chronological,
-        "_posts_collated" : this.postsDictionary.collated,
         "_tags" : this.postsDictionary.tagsDictionary,
-        "site" : this.site.attributes,
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",
-        "BASE_PATH" : "",
-        "page" : this.page.attributes
+        "BASE_PATH" : ""
       })
     },
 

@@ -34,7 +34,7 @@ define([
     },
 
     parse : function(response){
-      this.set(jsyaml.load(response));
+      this.set("dictionary", jsyaml.load(response));
       this.parseTags();
       this.buildChronology();
       this.collate();
@@ -44,14 +44,18 @@ define([
     // TODO: Need to optimize the post sorting for when post quantity gets unwieldy.
     buildChronology : function(){
       // Order by date descending
-      this.chronoHash = _.sortBy(this.attributes, function(post){
-        return new Date(post.date);
-      }).reverse();
+      this.set('chronoHash',
+        _.sortBy(this.get('dictionary'), function(post){
+          return new Date(post.date);
+        }).reverse()
+      )
       
       // Standardize this as a simple Array since pages operate in this way.
-      this.chronological = _.map(this.chronoHash, function(post){
-        return post.url;
-      })
+      this.set('chronological',
+        _.map(this.get('chronoHash'), function(post){
+          return post.url;
+        })
+      )
     },
     
     // Create a collated posts data structure.
@@ -60,8 +64,8 @@ define([
     //      'posts': [{}, {}, ..] }, ..] }, ..]
     //
     collate : function(){
-      this.collated = [];
-      _.each(this.chronoHash, function(post, i, posts){
+      var collated = [];
+      _.each(this.get('chronoHash'), function(post, i, posts){
         var thisDate = new Date(post.date);
         var thisYear = thisDate.getFullYear().toString();
         var thisMonth = this.Months[thisDate.getMonth()];
@@ -75,17 +79,17 @@ define([
 
         if(prevYear && prevYear === thisYear) 
           if(prevMonth && prevMonth === thisMonth)
-            this.collated[years.length-1]
+            collated[years.length-1]
               .months[years.months.length-1]
               .posts.push(post) // append to last year & month
           else
-            this.collated[years.length-1]
+            collated[years.length-1]
               .months.push({
                 'month' : thisMonth,
                 'posts' : new Array(post)
               }) // create new month
         else
-          this.collated.push({ 
+          collated.push({ 
             'year' : thisYear,
             'months' : [{ 
               'month' : thisMonth,
@@ -93,14 +97,16 @@ define([
             }]
           }) // create new year & month
 
-      }, this)  
+      }, this)
+
+      this.set('collated', collated);
     },
     
     // Create the TagsDictionary
     parseTags : function(){
       var tags = {}
       
-      _.each(this.attributes, function(post){
+      _.each(this.get('dictionary'), function(post){
         _.each(post.tags, function(tag){
           if( tags.hasOwnProperty(tag) )
             tags[tag].count += 1;
