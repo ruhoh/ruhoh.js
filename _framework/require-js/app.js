@@ -3,16 +3,29 @@ define([
   'underscore',
   'backbone',
   'router',
-  'models/config',
-  'models/preview',
-  'models/page',
-  'models/layout',
-  'models/payload',
   'utils/parse',
   'utils/log',
-  'handlebars',
   'yaml',
-], function($, _, Backbone, Router, Config, Preview, Page, Layout, Payload, Parse, Log, Handlebars){
+  
+  'dictionaries/pages',
+  'dictionaries/posts',
+    
+  'models/config',
+  'models/layout',
+  'models/page',
+  'models/payload',
+  'models/preview',
+  'models/site',
+  'models/tags',
+
+  'handlebars',
+  'partials',
+  'helpers'
+  
+], function($, _, Backbone, Router, Parse, Log, yaml, 
+  PagesDictionary, PostsDictionary, 
+  Config, Layout, Page, Payload, Preview, Site, Tags,
+  Handlebars, Partials, helpers){
 
   var App = { 
     
