@@ -48,7 +48,7 @@ define([
     // Parse the raw page/post file.
     parse : function(data){ 
       this.set(Parse.frontMatter(data, this.url()));
-      this.set("content", Parse.content(data));
+      this.set("content", Parse.content(data, this.id));
       return this.attributes;
     }
 

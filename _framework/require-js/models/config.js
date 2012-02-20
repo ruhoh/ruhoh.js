@@ -60,7 +60,7 @@ define([
     // Returns: String - Normalized absolute URL root.
     buildBasePath : function(){
       var nodes = this.get("basePath").split('/');
-      if(["", "index.html"].indexOf(_.last(nodes)) !== -1 ) nodes.pop();
+      if(["", "index.html", 'index.md'].indexOf(_.last(nodes)) !== -1 ) nodes.pop();
       this.set("basePath", nodes);
     },
     
