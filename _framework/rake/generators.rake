@@ -68,8 +68,8 @@ def generate_posts
     }
   }
   
-  open(JB::Path.build(:database, :node => 'posts_dictionary.json'), 'w') { |page|
-    page.puts dictionary.to_json
+  open(JB::Path.build(:database, :node => 'posts_dictionary.yml'), 'w') { |page|
+    page.puts dictionary.to_yaml
   }
   
   puts "=> Posts Done!"
@@ -105,8 +105,8 @@ def generate_pages
     }
   }
   
-   open(JB::Path.build(:database, :node => 'pages_dictionary.json'), 'w') { |page|
-     page.puts dictionary.to_json
+   open(JB::Path.build(:database, :node => 'pages_dictionary.yml'), 'w') { |page|
+     page.puts dictionary.to_yaml
    }
   
   puts 'Invalid Pages'

@@ -23,7 +23,7 @@ define([
     },
     
     url : function(){
-      return this.config.getDataPath('/_database/pages.yml');
+      return this.config.getDataPath('/_database/pages_dictionary.yml');
     },
     
     parse : function(response){
