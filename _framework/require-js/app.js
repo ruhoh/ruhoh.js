@@ -21,13 +21,13 @@ define([
   'collections/partials',
 
   'handlebars',
-  'helpers'
-  
+  'helpers',
+  'markdown'
 ], function($, _, Backbone, Router, Parse, Log, yaml, 
   PagesDictionary, PostsDictionary, 
   Config, Layout, Page, Payload, Preview, Site, Partial,
   Partials,
-  Handlebars, helpers){
+  Handlebars, helpers, Markdown){
 
   var App = { 
     
