@@ -59,6 +59,7 @@ def generate_posts
         end
         
         data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+        data['id'] = filename
         data['url'] = filename
 
         posts << filename 
@@ -95,6 +96,7 @@ def generate_pages
         end
         
         data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+        data['id'] = filename
         data['url'] = filename
 
         pages << filename 

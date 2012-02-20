@@ -63,7 +63,7 @@ define([
   //   It works now because the dictionary is renewed on every preview generation.
   //
   // context - Optional [Array] 
-  //   Pass an array of page ids (urls)
+  //   Pass an array of page ids (page.id)
   //   The ids are expanded into objects from the page dictionary.
   //   If there is no context, we assume the pages dictionary.
   //
@@ -75,12 +75,12 @@ define([
   Handlebars.registerHelper('pages_list', function(context, block) {
     var template = block ? block.fn : context.fn;
     var pages = _.isArray(context) 
-      ? _.map( context, function(url){ return this.pages[url] }, this)
+      ? _.map( context, function(id){ return this.pages[id] }, this)
       : this.pages;
 
     var cache = '';
     _.each(pages, function(page){
-      if(this.page.id.replace(/^\//,'') === page.url.replace(/^\//,'')) page.isActivePage = true;
+      if(this.page.id.replace(/^\//,'') === page.id.replace(/^\//,'')) page.isActivePage = true;
       cache += template(page);
     }, this);
     
@@ -92,7 +92,7 @@ define([
   // Default order is reverse chronological.
   //
   // context - Optional [Array]
-  //   Pass an array of post ids (urls)
+  //   Pass an array of post ids (post.id)
   //   The ids are expanded into objects from the post dictionary.
   //   If there is no context, we assume the ordered post array from posts dictionary..
   //
@@ -105,7 +105,7 @@ define([
     var template = block ? block.fn : context.fn;
     var posts = _.map( 
       ( _.isArray(context) ? context : this._posts.chronological ),
-      function(url){ return this._posts.dictionary[url] },
+      function(id){ return this._posts.dictionary[id] },
       this
     );
 

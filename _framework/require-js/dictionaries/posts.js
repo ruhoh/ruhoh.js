@@ -38,7 +38,6 @@ define([
       // set id and transform url for client-side rendering.
       // i.e. we need 'real' paths so javascript can $.get it.
       for(key in posts){
-        posts[key].id = key;
         posts[key]['url'] = this.config.fileJoin(this.config.get('postsDirectory'), key)
       }
       
