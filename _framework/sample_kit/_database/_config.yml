@@ -22,16 +22,15 @@ navigation :
   -
     archive.html
   -
+    pages.md
+  -
+    tags.md
+  -
+    pages/about.md
+  -
+    pages/index.html
+  -
     categories.html
-  -
-    pages.html
-  -
-    tags.html
-  -
-    pages/about.html
-  -
-    pages
-
       
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 

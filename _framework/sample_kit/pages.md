@@ -5,7 +5,8 @@ header: Pages
 group: navigation
 ---
 
-<h2>All Pages</h2>
+## All Pages
+
 <ul>
 {{#pages_list}}
   {{> pages_list }}

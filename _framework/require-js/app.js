@@ -48,7 +48,7 @@ define([
       
       this.Router.bind("route:home", function(){
         that.preview.page.clear({silent : true})
-        that.preview.page.set("id", "index.html")
+        that.preview.page.set("id", 'index.md')
       })
       
       this.Router.bind("route:page", function(page){
