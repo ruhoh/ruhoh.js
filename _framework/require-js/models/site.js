@@ -20,7 +20,7 @@ define([
     },
 
     url : function(){
-      return this.config.getDataPath('/_database/_config.yml');
+      return this.config.getDataPath('/_config.yml');
     },
 
     parse : function(response){
