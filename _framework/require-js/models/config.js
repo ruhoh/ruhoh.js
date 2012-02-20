@@ -10,6 +10,7 @@ define([
 
     initialize : function(attrs){
       this.set("basePath", (attrs.basePath ? attrs.basePath : window.location.pathname));
+      this.set('postsDirectory', '_posts');
       this.buildBasePath();
       this.bind("change:basePath", this.buildBasePath, this);
     },
@@ -32,7 +33,15 @@ define([
          )
       ).join('/');
     },
-
+    
+    // Like ruby B)
+    fileJoin : function(){
+      if(arguments.length === 0) return '';
+      return _.compact( 
+          Array.prototype.slice.call(arguments).join('/').split('/')
+        ).join('/');
+    },
+    
     // Internal : Builds the absolute URL path to assets relative to enabled theme.
     //
     // path - (Optional) String of a path to an asset.

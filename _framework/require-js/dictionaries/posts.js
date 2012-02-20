@@ -34,7 +34,15 @@ define([
     },
 
     parse : function(response){
-      this.set("dictionary", jsyaml.load(response));
+      var posts = jsyaml.load(response) || {};
+      // set id and transform url for client-side rendering.
+      // i.e. we need 'real' paths so javascript can $.get it.
+      for(key in posts){
+        posts[key].id = key;
+        posts[key]['url'] = this.config.fileJoin(this.config.get('postsDirectory'), key)
+      }
+      
+      this.set("dictionary", posts);
       this.parseTags();
       this.buildChronology();
       this.collate();
@@ -42,6 +50,7 @@ define([
     },
     
     // TODO: Need to optimize the post sorting for when post quantity gets unwieldy.
+    // Sets a sorted Array containing Objects.
     buildChronology : function(){
       // Order by date descending
       this.set('chronoHash',
@@ -51,9 +60,10 @@ define([
       )
       
       // Standardize this as a simple Array since pages operate in this way.
+      // Sets a sorted Array containing Objects.
       this.set('chronological',
         _.map(this.get('chronoHash'), function(post){
-          return post.url;
+          return post.id;
         })
       )
     },
