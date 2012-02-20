@@ -66,6 +66,7 @@ define([
   //   Pass an array of page ids (page.id)
   //   The ids are expanded into objects from the page dictionary.
   //   If there is no context, we assume the pages dictionary.
+  //   TODO: Log unfound pages.
   //
   // Examples
   //
@@ -74,9 +75,13 @@ define([
   // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('pages_list', function(context, block) {
     var template = block ? block.fn : context.fn;
-    var pages = _.isArray(context) 
-      ? _.map( context, function(id){ return this.pages[id] }, this)
-      : this.pages;
+
+    var pages = [];
+    if ( _.isArray(context) )
+      _.each(context, function(id){
+        if(this.pages[id]) pages.push(this.pages[id])
+      }, this)
+    else pages = this.pages;
 
     var cache = '';
     _.each(pages, function(page){
