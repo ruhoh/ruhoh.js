@@ -1,10 +1,12 @@
 "about.html" : 
+  id : about.html
   url : about.html
   layout : page
   title : "About This Site"
   tagline : Some stuff about the about page.
 
 "archive.html" :
+  id : archive.html
   url : archive.html
   layout: page
   title : Archive
@@ -12,6 +14,7 @@
   group: navigation  
 
 "categories.html" :
+  id : categories.html
   url : categories.html
   layout: page
   title: Categories
@@ -19,6 +22,7 @@
   group: navigation
 
 "pages.html" :
+  id : pages.html
   url : pages.html
   layout: page
   title: Pages 
@@ -26,18 +30,21 @@
   group: navigation
 
 "pages/about.html" :
+  id : pages/about.html
   url : pages/about.html
   layout : page
   title : "About This Site"
   tagline : Some stuff about the about page.
 
 "pages" :
+  id : pages
   url : pages
   layout : post
   title : A cool index page
   tagline : Do it
   
 "tags.html" :
+  id : tags.html
   url : tags.html
   layout: page
   title: Tags
