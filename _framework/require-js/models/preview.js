@@ -63,7 +63,7 @@ define([
       this.pagesDictionary.config = this.config,
       this.postsDictionary.config = this.config;
       
-      this.page.bind("change:id", function(){
+      this.page.bind("change:url", function(){
         this.generate();
       }, this)
     },
@@ -89,12 +89,12 @@ define([
       this.site.set("tags", this.postsDictionary.tags);
       
       // Quick hack to set prev/next posts
-      var position = this.postsDictionary.get('chronological').indexOf(this.page.get("url"))
+      var position = this.postsDictionary.get('chronological').indexOf(this.page.get("id"))
       if(position !== -1)
         this.page.set({
           "next" : this.postsDictionary.get('dictionary')[this.postsDictionary.get('chronological')[position+1]],
           "previous" : this.postsDictionary.get('dictionary')[this.postsDictionary.get('chronological')[position-1]]
-        })
+        }, {silent : true})
       
       this.payload.set({
         "site" : this.site.attributes,
