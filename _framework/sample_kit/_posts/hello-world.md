@@ -2,7 +2,6 @@
 layout : post
 date : 2011/12/01
 title : "Hello World =)!"
-url : hello-world.html
 category : lessons
 tags : [intro, beginner, jekyll, tutorial, apple]
 ---

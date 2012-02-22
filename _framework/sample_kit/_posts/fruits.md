@@ -1,6 +1,5 @@
 ---
 layout : post
-url : fruits.html
 date : 2012/1/01
 title : "How to eat fruit."
 category : lessons
