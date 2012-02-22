@@ -137,8 +137,8 @@ define([
   Handlebars.registerHelper('tags_list', function(context, block) {
     var template = block ? block.fn : context.fn;
     var tags = _.isArray(context) 
-      ? _.map( context, function(name){ return this._tags[name] }, this)
-      : this._tags;
+      ? _.map( context, function(name){ return this._posts.tags[name] }, this)
+      : this._posts.tags;
 
     var cache = '';
     _.each(tags, function(tag){

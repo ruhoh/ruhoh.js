@@ -34,17 +34,14 @@ define([
     },
 
     parse : function(response){
-      var posts = jsyaml.load(response) || {};
+      var data = jsyaml.load(response) || {};
       // set id and transform url for client-side rendering.
       // i.e. we need 'real' paths so javascript can $.get it.
-      for(key in posts){
-        posts[key]['url'] = this.config.fileJoin(this.config.get('postsDirectory'), key)
+      for(key in data['dictionary']){
+        data['dictionary'][key]['url'] = this.config.fileJoin(this.config.get('postsDirectory'), key)
       }
       
-      this.set("dictionary", posts);
-      this.parseTags();
-      this.buildChronology();
-      this.collate();
+      this.set(data);
       return this.attributes;
     },
     
@@ -88,11 +85,11 @@ define([
 
         if(prevYear && prevYear === thisYear) 
           if(prevMonth && prevMonth === thisMonth)
-            collated[years.length-1]
-              .months[years.months.length-1]
+            collated[collated.length-1]
+              .months[collated.months.length-1]
               .posts.push(post) // append to last year & month
           else
-            collated[years.length-1]
+            collated[collated.length-1]
               .months.push({
                 'month' : thisMonth,
                 'posts' : new Array(post)

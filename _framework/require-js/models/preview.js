@@ -86,7 +86,8 @@ define([
     
     // Build the payload.
     buildPayload : function(){
-      this.site.set("tags", this.postsDictionary.tags);
+      // jekyll compatability?
+      this.site.set("tags", this.postsDictionary.get('tags'));
       
       // Quick hack to set prev/next posts
       var position = this.postsDictionary.get('chronological').indexOf(this.page.get("id"))
@@ -101,7 +102,6 @@ define([
         "page" : this.page.attributes,
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,
-        "_tags" : this.postsDictionary.tagsDictionary,
         "ASSET_PATH" : this.config.getThemePath(),
         "HOME_PATH" : "/",
         "BASE_PATH" : ""
