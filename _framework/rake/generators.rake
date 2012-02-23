@@ -131,8 +131,8 @@ module RO
           prevMonth = Time.new(posts[i-1]['date']).strftime('%B')
         end
 
-        if(prevYear && prevYear === thisYear) 
-          if(prevMonth && prevMonth === thisMonth)
+        if(prevYear && prevYear == thisYear) 
+          if(prevMonth && prevMonth == thisMonth)
             collated.last['months'].last['posts'] << post # append to last year & month
           else
             collated.last['months'] << {
