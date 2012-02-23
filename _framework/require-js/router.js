@@ -8,6 +8,7 @@ define([
 
     routes: {
       "" : "home",
+      "index.html" : "home",
       "*page": "page"
     }
 
