@@ -173,24 +173,24 @@ module RO
     end
 
     def self.parse_categories(posts)
-  categories = {}
+      categories = {}
 
-  posts.each do |post|
-    cats = post['categories'] ? post['categories'] : Array(post['category']).join('/')
+      posts.each do |post|
+        cats = post['categories'] ? post['categories'] : Array(post['category']).join('/')
     
-    Array(cats).each do |cat|
-      cat = Array(cat).join('/')
-      if categories[cat]
-        categories[cat]['count'] += 1
-      else
-        categories[cat] = { 'count' => 1, 'name' => cat, 'posts' => [] }
-      end 
+        Array(cats).each do |cat|
+          cat = Array(cat).join('/')
+          if categories[cat]
+            categories[cat]['count'] += 1
+          else
+            categories[cat] = { 'count' => 1, 'name' => cat, 'posts' => [] }
+          end 
 
-      categories[cat]['posts'] << post['url']
+          categories[cat]['posts'] << post['url']
+        end
+      end  
+      categories
     end
-  end  
-  categories
-end
 
   end # Post
   
