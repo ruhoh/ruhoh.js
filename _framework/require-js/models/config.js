@@ -9,7 +9,7 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      this.set("basePath", (attrs.basePath ? attrs.basePath : window.location.pathname));
+      this.set("basePath", (attrs.basePath || '/'));
       this.set('postsDirectory', '_posts');
       this.buildBasePath();
       this.bind("change:basePath", this.buildBasePath, this);

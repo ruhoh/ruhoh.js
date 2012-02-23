@@ -1,5 +1,5 @@
 require.config({
-  baseUrl : "_framework/require-js/",
+  baseUrl : "/_framework/require-js/",
   urlArgs: "bust=" + (new Date()).getTime(),
   paths : {
     'jquery' : 'libs/jquery-1.7.1',

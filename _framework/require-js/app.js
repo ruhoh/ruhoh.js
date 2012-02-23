@@ -66,7 +66,7 @@ define([
       // Start Router.
       Backbone.history.start({
         pushState: true, 
-        root: (this.appConfig.basePath ? this.appConfig.basePath : window.location.pathname)
+        root: (this.appConfig.basePath || '/')
       });
     }
 
