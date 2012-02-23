@@ -6,11 +6,16 @@ group: navigation
 ---
 
 <ul class="tag_box inline">
-  <li><a href="/categories.html#lessons-ref">
-    lessons <span>1</span>
-  </a></li>
+{{#categories_list}}
+  {{>categories_list}}
+{{/categories_list}}
 </ul>
-<h2 id="lessons-ref">lessons</h2>
-<ul>
-  <li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-</ul>
+
+{{#categories_list}}
+  <h2>{{ name }} ({{ count }})</h2>
+  <ul>
+    {{#posts}}
+    <li>{{.}}</li>
+    {{/posts}}
+  </ul>
+{{/categories_list}}

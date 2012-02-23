@@ -1,4 +1,31 @@
 --- 
+dictionary: 
+  fruits.md: &id001 
+    layout: post
+    date: 2012/1/01
+    title: How to eat fruit.
+    category: sample
+    tags: 
+    - apple
+    - banana
+    - lemon
+    id: fruits.md
+    url: fruits.md
+  hello-world.md: &id002 
+    layout: post
+    date: 2011/12/01
+    title: Hello World =)!
+    category: 
+    - samples
+    - yay
+    tags: 
+    - intro
+    - beginner
+    - jekyll
+    - tutorial
+    - apple
+    id: hello-world.md
+    url: hello-world.md
 chronological: 
 - fruits.md
 - hello-world.md
@@ -7,37 +34,12 @@ collated:
   months: 
   - month: January
     posts: 
-    - &id001 
-      layout: post
-      date: 2012/1/01
-      title: How to eat fruit.
-      category: lessons
-      tags: 
-      - apple
-      - banana
-      - lemon
-      id: fruits.md
-      url: fruits.md
+    - *id001
 - year: "2011"
   months: 
   - month: January
     posts: 
-    - &id002 
-      layout: post
-      date: 2011/12/01
-      title: Hello World =)!
-      category: lessons
-      tags: 
-      - intro
-      - beginner
-      - jekyll
-      - tutorial
-      - apple
-      id: hello-world.md
-      url: hello-world.md
-dictionary: 
-  fruits.md: *id001
-  hello-world.md: *id002
+    - *id002
 tags: 
   apple: 
     count: 2
@@ -73,5 +75,16 @@ tags:
   tutorial: 
     count: 1
     name: tutorial
+    posts: 
+    - hello-world.md
+categories: 
+  sample: 
+    count: 1
+    name: sample
+    posts: 
+    - fruits.md
+  samples/yay: 
+    count: 1
+    name: samples/yay
     posts: 
     - hello-world.md

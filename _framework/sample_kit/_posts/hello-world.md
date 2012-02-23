@@ -2,7 +2,7 @@
 layout : post
 date : 2011/12/01
 title : "Hello World =)!"
-category : lessons
+category : [samples, yay]
 tags : [intro, beginner, jekyll, tutorial, apple]
 ---
 
