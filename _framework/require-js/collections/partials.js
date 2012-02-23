@@ -18,6 +18,7 @@ define([
     FrameworkPartials : [
       ['pages_list','pages_list'],
       ['tags_list','tags_list'],
+      ['categories_list','categories_list'],
       ['posts_collate','posts_collate'],
 
       ['analytics-providers/google','analytics.google'],

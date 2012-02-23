@@ -161,10 +161,14 @@ define([
   //
   // Returns: [String] - The parsed block content.
   Handlebars.registerHelper('categories_list', function(context, block) {
-    var template = block.fn;
+    var template = block ? block.fn : context.fn;
+    var categories = _.isArray(context) 
+      ? _.map( context, function(name){ return this._posts.categories[name] }, this)
+      : this._posts.categories;
+
     var cache = '';
-    _.each(context, function(data){
-      cache += template(data);
+    _.each(categories, function(cat){
+      cache += template(cat);
     }, this);
     
     return new Handlebars.SafeString(cache);
