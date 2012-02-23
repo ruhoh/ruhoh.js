@@ -1,5 +1,6 @@
 require 'yaml'
 require 'json'
+require 'time'
 
 FMregex = /^---\n(.|\n)*---\n/
 
@@ -93,9 +94,19 @@ module RO
             end
         
             data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+            
+            ## Test for valid date
+            begin 
+              Time.parse(data['date'])
+            rescue
+              puts "Invalid date format on: #{filename}"
+              puts "Date should be: YYYY/MM/DD"
+              invalid_posts << filename
+              next
+            end
+            
             data['id'] = filename
             data['url'] = filename
-
             dictionary[filename] = data
           end
         }
@@ -117,18 +128,13 @@ module RO
     # 
     def self.collate(posts)
       collated = []
-
       posts.each_with_index do |post, i|
-        thisYear = Time.new(post['date']).strftime('%Y')
-        thisMonth = Time.new(post['date']).strftime('%B')
-        prevDate = ''
-        prevMonth = ''
-        prevYear = ''
-
+        thisYear = Time.parse(post['date']).strftime('%Y')
+        thisMonth = Time.parse(post['date']).strftime('%B')
+        
         if posts[i-1] 
-          prevDate = posts[i-1]['date']
-          prevYear = Time.new(posts[i-1]['date']).strftime('%Y')
-          prevMonth = Time.new(posts[i-1]['date']).strftime('%B')
+          prevYear = Time.parse(posts[i-1]['date']).strftime('%Y')
+          prevMonth = Time.parse(posts[i-1]['date']).strftime('%B')
         end
 
         if(prevYear && prevYear == thisYear) 
