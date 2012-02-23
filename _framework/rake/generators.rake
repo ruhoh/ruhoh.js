@@ -74,13 +74,16 @@ def generate_posts
   chronological = build_chronology(posts_array)
   collated_posts = collate(posts_array)
   tags = parse_tags(posts_array)
+  categories = parse_categories(posts_array)
   
   data = {
+    'dictionary' => dictionary,
     'chronological' => chronological,
     'collated' => collated_posts,
-    'dictionary' => dictionary,
-    'tags' => tags
+    'tags' => tags,
+    'categories' => categories
   }
+
   open(JB::Path.build(:database, :node => 'posts_dictionary.yml'), 'w') { |page|
     page.puts data.to_yaml
   }
@@ -156,6 +159,25 @@ def parse_tags(posts)
   tags
 end
 
+def parse_categories(posts)
+  categories = {}
+
+  posts.each do |post|
+    cats = post['categories'] ? post['categories'] : Array(post['category']).join('/')
+    
+    Array(cats).each do |cat|
+      cat = Array(cat).join('/')
+      if categories[cat]
+        categories[cat]['count'] += 1
+      else
+        categories[cat] = { 'count' => 1, 'name' => cat, 'posts' => [] }
+      end 
+
+      categories[cat]['posts'] << post['url']
+    end
+  end  
+  categories
+end
   
 # Public: Generate the Pages dictionary.
 #
