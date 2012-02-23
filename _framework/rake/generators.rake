@@ -29,137 +29,150 @@ module JB
   end #Path
 end #JB
 
-# Public: Generate data from the site assets (posts/pages).
-# The data structures are referred to as "dictionaries".
-#
-# Returns: Nothing.
-task :generate do
-  #generate_pages
-  generate_posts
-end
 
-# Public: Generate the Posts dictionary.
-#
-def generate_posts
-  puts "=> Generating Posts"
+task :generate => 'generate:all'
 
-  posts = []
-  invalid_posts = []
-  dictionary = {}
+namespace :generate do
+
+  # Public: Generate data from the site assets (posts/pages).
+  # The data structures are referred to as "dictionaries".
+  #
+  # Returns: Nothing.
+  task :all => ['pages', 'posts']
+
+  task :pages do 
+    RO::Pages::generate
+  end
   
-  FileUtils.cd(JB::Path.build(:site_path, :node => "_posts" )) {
-    Dir.glob("**/*.*") { |filename| 
-      next if FileTest.directory?(filename)
-      next if ['_', '.'].include? filename[0]
-
-      File.open(filename) do |page|
-        front_matter = page.read.match(FMregex)
-        if !front_matter
-          invalid_posts << filename ; next
-        end
-        
-        data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
-        data['id'] = filename
-        data['url'] = filename
-
-        posts << filename 
-        dictionary[filename] = data
-      end
-    }
-  }
-  
-  posts_array = []
-  dictionary.each_value { |val| posts_array << val }
-
-  chronological = build_chronology(posts_array)
-  collated_posts = collate(posts_array)
-  tags = parse_tags(posts_array)
-  categories = parse_categories(posts_array)
-  
-  data = {
-    'dictionary' => dictionary,
-    'chronological' => chronological,
-    'collated' => collated_posts,
-    'tags' => tags,
-    'categories' => categories
-  }
-
-  open(JB::Path.build(:database, :node => 'posts_dictionary.yml'), 'w') { |page|
-    page.puts data.to_yaml
-  }
-  
-  puts "=> Posts Done!"
-end
-
-def build_chronology(posts)
-  posts.sort {
-    |a,b| Date.parse(b['date']) <=> Date.parse(a['date'])
-  }.map { |post| post['id'] }
-end
-
-# // Create a collated posts data structure.
-# // [{ 'year': year, 
-# //   'months' : [{ 'month' : month, 
-# //      'posts': [{}, {}, ..] }, ..] }, ..]
-# //
-def collate(posts)
-  collated = []
-
-  posts.each_with_index do |post, i|
-    thisYear = Time.new(post['date']).strftime('%Y')
-    thisMonth = Time.new(post['date']).strftime('%B')
-    prevDate = ''
-    prevMonth = ''
-    prevYear = ''
-
-    if posts[i-1] 
-      prevDate = posts[i-1]['date']
-      prevYear = Time.new(posts[i-1]['date']).strftime('%Y')
-      prevMonth = Time.new(posts[i-1]['date']).strftime('%B')
-    end
-
-    if(prevYear && prevYear === thisYear) 
-      if(prevMonth && prevMonth === thisMonth)
-        collated.last['months'].last['posts'] << post # append to last year & month
-      else
-        collated.last['months'] << {
-            'month' => thisMonth,
-            'posts' => [post]
-          } # create new month
-      end
-    else
-      collated << { 
-        'year' => thisYear,
-        'months' => [{ 
-          'month' => thisMonth,
-          'posts' => [post]
-        }]
-      } # create new year & month
-    end
-
+  task :posts do 
+    RO::Posts::generate
   end
 
-  collated
-end
+end  
 
-def parse_tags(posts)
-  tags = {}
+module RO
+  module Posts
+
+    # Public: Generate the Posts dictionary.
+    #
+    def self.generate
+      puts "=> Generating Posts"
+
+      dictionary, invalid_posts = self.process_posts
+      posts_array = []
+      dictionary.each_value { |val| posts_array << val }
+      
+      data = {
+        'dictionary' => dictionary,
+        'chronological' => self.build_chronology(posts_array),
+        'collated' => self.collate(posts_array),
+        'tags' => self.parse_tags(posts_array),
+        'categories' => self.parse_categories(posts_array)
+      }
+
+      open(JB::Path.build(:database, :node => 'posts_dictionary.yml'), 'w') { |page|
+        page.puts data.to_yaml
+      }
   
-  posts.each do |post|
-    Array(post['tags']).each do |tag|
-      if tags[tag]
-        tags[tag]['count'] += 1
-      else
-        tags[tag] = { 'count' => 1, 'name' => tag, 'posts' => [] }
-      end 
-
-      tags[tag]['posts'] << post['url']
+      puts "=> Posts Done!"
     end
-  end  
-  tags
-end
 
-def parse_categories(posts)
+    def self.process_posts
+      dictionary = {}
+      invalid_posts = []
+
+      FileUtils.cd(JB::Path.build(:site_path, :node => "_posts" )) {
+        Dir.glob("**/*.*") { |filename| 
+          next if FileTest.directory?(filename)
+          next if ['_', '.'].include? filename[0]
+
+          File.open(filename) do |page|
+            front_matter = page.read.match(FMregex)
+            if !front_matter
+              invalid_posts << filename ; next
+            end
+        
+            data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+            data['id'] = filename
+            data['url'] = filename
+
+            dictionary[filename] = data
+          end
+        }
+      }
+      
+      [dictionary, invalid_posts]
+    end
+    
+    def self.build_chronology(posts)
+      posts.sort {
+        |a,b| Date.parse(b['date']) <=> Date.parse(a['date'])
+      }.map { |post| post['id'] }
+    end
+
+    # Create a collated posts data structure.
+    # [{ 'year': year, 
+    #   'months' : [{ 'month' : month, 
+    #     'posts': [{}, {}, ..] }, ..] }, ..]
+    # 
+    def self.collate(posts)
+      collated = []
+
+      posts.each_with_index do |post, i|
+        thisYear = Time.new(post['date']).strftime('%Y')
+        thisMonth = Time.new(post['date']).strftime('%B')
+        prevDate = ''
+        prevMonth = ''
+        prevYear = ''
+
+        if posts[i-1] 
+          prevDate = posts[i-1]['date']
+          prevYear = Time.new(posts[i-1]['date']).strftime('%Y')
+          prevMonth = Time.new(posts[i-1]['date']).strftime('%B')
+        end
+
+        if(prevYear && prevYear === thisYear) 
+          if(prevMonth && prevMonth === thisMonth)
+            collated.last['months'].last['posts'] << post # append to last year & month
+          else
+            collated.last['months'] << {
+                'month' => thisMonth,
+                'posts' => [post]
+              } # create new month
+          end
+        else
+          collated << { 
+            'year' => thisYear,
+            'months' => [{ 
+              'month' => thisMonth,
+              'posts' => [post]
+            }]
+          } # create new year & month
+        end
+
+      end
+
+      collated
+    end
+
+    def self.parse_tags(posts)
+      tags = {}
+  
+      posts.each do |post|
+        Array(post['tags']).each do |tag|
+          if tags[tag]
+            tags[tag]['count'] += 1
+          else
+            tags[tag] = { 'count' => 1, 'name' => tag, 'posts' => [] }
+          end 
+
+          tags[tag]['posts'] << post['url']
+        end
+      end  
+      tags
+    end
+
+    def self.parse_categories(posts)
   categories = {}
 
   posts.each do |post|
@@ -178,45 +191,51 @@ def parse_categories(posts)
   end  
   categories
 end
+
+  end # Post
   
-# Public: Generate the Pages dictionary.
-#
-def generate_pages 
-  puts "=> Generating pages"
+  module Pages
+    
+    # Public: Generate the Pages dictionary.
+    #
+    def self.generate
+      puts "=> Generating pages"
 
-  pages = []
-  invalid_pages = []
-  dictionary = {}
+      pages = []
+      invalid_pages = []
+      dictionary = {}
+
+      FileUtils.cd(JB::Path.build(:site_path)) {
+        Dir.glob("**/*.*") { |filename| 
+          next if FileTest.directory?(filename)
+          next if ['_', '.'].include? filename[0]
+
+          File.open(filename) do |page|
+            front_matter = page.read.match(FMregex)
+            if !front_matter
+              invalid_pages << filename ; next
+            end
+
+            data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+            data['id'] = filename
+            data['url'] = filename
+
+            pages << filename 
+            dictionary[filename] = data
+          end
+        }
+      }
+
+       open(JB::Path.build(:database, :node => 'pages_dictionary.yml'), 'w') { |page|
+         page.puts dictionary.to_yaml
+       }
+
+      puts 'Invalid Pages'
+      puts invalid_pages
+      puts "Pages Done!"
+      puts '---'
+    end
+
+  end # Page
   
-  FileUtils.cd(JB::Path.build(:site_path)) {
-    Dir.glob("**/*.*") { |filename| 
-      next if FileTest.directory?(filename)
-      next if ['_', '.'].include? filename[0]
-
-      File.open(filename) do |page|
-        front_matter = page.read.match(FMregex)
-        if !front_matter
-          invalid_pages << filename ; next
-        end
-        
-        data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
-        data['id'] = filename
-        data['url'] = filename
-
-        pages << filename 
-        dictionary[filename] = data
-      end
-    }
-  }
-  
-   open(JB::Path.build(:database, :node => 'pages_dictionary.yml'), 'w') { |page|
-     page.puts dictionary.to_yaml
-   }
-  
-  puts 'Invalid Pages'
-  puts invalid_pages
-  puts "Pages Done!"
-  puts '---'
-end
-
-
+end # RO
