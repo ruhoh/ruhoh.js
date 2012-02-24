@@ -32,7 +32,7 @@ define([
   // page/posts exist as data-structures only.
   // Aggrregate data-structures can be built from those objects.
   //
-  // However for the purpose of the _framework, the preview
+  // However for the purpose of the _client, the preview
   // object is what renders what you see in the browser.
   return Backbone.Model.extend({ 
     master : Layout,
