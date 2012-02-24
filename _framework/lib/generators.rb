@@ -10,9 +10,9 @@ module JB
   class Path
     SOURCE = "."
     Paths = {
-      :site_path => "_framework/sample_kit",
+      :site_path => "sample_kit",
       :layouts => "_layouts",
-      :database => "_framework/sample_kit/_database",
+      :database => "sample_kit/_database",
       :posts => "_posts"
     }
     

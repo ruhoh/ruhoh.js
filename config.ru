@@ -2,7 +2,7 @@ require 'rack'
 require './_framework/lib/generators'
 require './_framework/lib/watch'
 
-SiteSource = "#{Dir.pwd}/_framework/sample_kit"
+SiteSource = "#{Dir.pwd}/sample_kit"
 
 # Generate our data structures
 RuhOh::Posts::generate
@@ -14,7 +14,7 @@ RuhOh::Watch::start(SiteSource)
 
 use Rack::Lint
 use Rack::ShowExceptions
-use Rack::Static, :urls => ['/_framework', '/themes'], :root => '.'
+use Rack::Static, :urls => ['/_framework', '/themes', '/sample_kit'], :root => '.'
 
 run Proc.new { |env|
   [200, {'Content-Type' => 'text/html'}, [File.read('./index.html')]]
