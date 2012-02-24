@@ -1,6 +1,6 @@
 require 'rack'
-require './_framework/lib/generators'
-require './_framework/lib/watch'
+require './lib/generators'
+require './lib/watch'
 
 SiteSource = "#{Dir.pwd}/sample_kit"
 

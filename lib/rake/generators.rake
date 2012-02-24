@@ -1,4 +1,4 @@
-require './_framework/lib/generators'
+require './lib/generators'
 
 task :generate => 'generate:all'
 
