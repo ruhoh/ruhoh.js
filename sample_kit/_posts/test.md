@@ -1,12 +1,12 @@
 ---
 layout : post
-date : 2012/1/01
-title : "How to eat fruit."
-category : sample
+date : 2008/8/01
+title : Meep Meep =)
+category : old-posts
 tags : [apple,  banana, lemon]
 ---
 
-## Some stuff about fruit
+## Meep Meep =D
 
 - Apple
 - Banana

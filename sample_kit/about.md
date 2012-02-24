@@ -4,7 +4,7 @@ title : "About This Site"
 tagline : Some stuff about the about page.
 ---
 
-## Motivation
+## Motivation teehee
 
 Jekyll-bootstrap is meant to make it easier for technically-minded people to share their knowledge.
 

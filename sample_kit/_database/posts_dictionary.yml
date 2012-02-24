@@ -1,6 +1,6 @@
 --- 
 dictionary: 
-  fruits.md: &id001 
+  fruits.md: &id002 
     layout: post
     date: 2012/1/01
     title: How to eat fruit.
@@ -11,7 +11,19 @@ dictionary:
     - lemon
     id: fruits.md
     url: fruits.md
-  hello-world.md: &id002 
+  haro-post.md: &id001 
+    layout: post
+    date: 2012/2/21
+    title: My most recent post
+    category: cool
+    tags: 
+    - apple
+    - banana
+    - lemon
+    - pear
+    id: haro-post.md
+    url: haro-post.md
+  hello-world.md: &id003 
     layout: post
     date: 2011/12/01
     title: Hello World =)!
@@ -26,37 +38,69 @@ dictionary:
     - apple
     id: hello-world.md
     url: hello-world.md
+  test.md: &id004 
+    layout: post
+    date: 2008/8/01
+    title: Meep Meep =)
+    category: old-posts
+    tags: 
+    - apple
+    - banana
+    - lemon
+    id: test.md
+    url: test.md
 chronological: 
+- haro-post.md
 - fruits.md
 - hello-world.md
+- test.md
 collated: 
 - year: "2012"
   months: 
-  - month: January
+  - month: February
     posts: 
     - *id001
-- year: "2011"
-  months: 
   - month: January
     posts: 
     - *id002
+- year: "2011"
+  months: 
+  - month: December
+    posts: 
+    - *id003
+- year: "2008"
+  months: 
+  - month: August
+    posts: 
+    - *id004
 tags: 
   apple: 
-    count: 2
+    count: 4
     name: apple
     posts: 
+    - haro-post.md
     - fruits.md
     - hello-world.md
+    - test.md
   banana: 
-    count: 1
+    count: 3
     name: banana
     posts: 
+    - haro-post.md
     - fruits.md
+    - test.md
   lemon: 
-    count: 1
+    count: 3
     name: lemon
     posts: 
+    - haro-post.md
     - fruits.md
+    - test.md
+  pear: 
+    count: 1
+    name: pear
+    posts: 
+    - haro-post.md
   intro: 
     count: 1
     name: intro
@@ -78,6 +122,11 @@ tags:
     posts: 
     - hello-world.md
 categories: 
+  cool: 
+    count: 1
+    name: cool
+    posts: 
+    - haro-post.md
   sample: 
     count: 1
     name: sample
@@ -88,3 +137,8 @@ categories:
     name: samples/yay
     posts: 
     - hello-world.md
+  old-posts: 
+    count: 1
+    name: old-posts
+    posts: 
+    - test.md
