@@ -47,7 +47,7 @@ define([
     // path - (Optional) String of a path to an asset.
     // Returns: String - Normalized absolute URL paath to theme assets.
     getThemePath : function(path){
-      return this.getPath(this.get("themePath"), this.get("theme"),  path);
+      return this.getPath(this.get('site_source'), '_themes', this.get("theme"),  path);
     },
     
     getDataPath : function(path){
