@@ -39,7 +39,7 @@ module RuhOh
     # Public: Generate the Posts dictionary.
     #
     def self.generate
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
       puts "=> Generating Posts"
 
       dictionary, invalid_posts = process_posts
@@ -199,7 +199,7 @@ module RuhOh
     # Public: Generate the Pages dictionary.
     #
     def self.generate
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
       puts "=> Generating pages"
 
       pages = []
@@ -253,7 +253,7 @@ module RuhOh
     #
     # Returns: Nothing
     def self.start
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
       puts "=> Start watching: #{RuhOh.config.site_source_path}"
       glob = ''
       
