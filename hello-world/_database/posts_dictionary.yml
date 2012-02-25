@@ -1,5 +1,17 @@
 --- 
 dictionary: 
+  a-sample-post.md: &id004 
+    layout: post
+    date: 2008/8/01
+    title: Meep Meep =) vroom vroom
+    category: old-posts
+    tags: 
+    - apple
+    - banana
+    - lemon
+    - orange
+    id: a-sample-post.md
+    url: a-sample-post.md
   fruits.md: &id002 
     layout: post
     date: 2012/1/01
@@ -38,22 +50,11 @@ dictionary:
     - apple
     id: hello-world.md
     url: hello-world.md
-  test.md: &id004 
-    layout: post
-    date: 2008/8/01
-    title: Meep Meep =)
-    category: old-posts
-    tags: 
-    - apple
-    - banana
-    - lemon
-    id: test.md
-    url: test.md
 chronological: 
 - haro-post.md
 - fruits.md
 - hello-world.md
-- test.md
+- a-sample-post.md
 collated: 
 - year: "2012"
   months: 
@@ -81,21 +82,21 @@ tags:
     - haro-post.md
     - fruits.md
     - hello-world.md
-    - test.md
+    - a-sample-post.md
   banana: 
     count: 3
     name: banana
     posts: 
     - haro-post.md
     - fruits.md
-    - test.md
+    - a-sample-post.md
   lemon: 
     count: 3
     name: lemon
     posts: 
     - haro-post.md
     - fruits.md
-    - test.md
+    - a-sample-post.md
   pear: 
     count: 1
     name: pear
@@ -121,6 +122,11 @@ tags:
     name: tutorial
     posts: 
     - hello-world.md
+  orange: 
+    count: 1
+    name: orange
+    posts: 
+    - a-sample-post.md
 categories: 
   cool: 
     count: 1
@@ -141,4 +147,4 @@ categories:
     count: 1
     name: old-posts
     posts: 
-    - test.md
+    - a-sample-post.md
