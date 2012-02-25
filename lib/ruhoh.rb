@@ -3,44 +3,46 @@ require 'json'
 require 'time'
 require 'fileutils'
 
-FMregex = /^---\n(.|\n)*---\n/
-
-# Path configuration helper
-module JB
-  class Path
-    SOURCE = "."
-    Paths = {
-      :site_path => "sample_kit",
-      :layouts => "_layouts",
-      :database => "sample_kit/_database",
-      :posts => "_posts"
-    }
-    
-    def self.base
-      SOURCE
-    end
-
-    # build a path relative to configured path settings.
-    def self.build(path, opts = {})
-      opts[:root] ||= SOURCE
-      path = "#{opts[:root]}/#{Paths[path.to_sym]}/#{opts[:node]}".split("/")
-      path.compact!
-      File.__send__ :join, path
-    end
-  
-  end #Path
-end #JB
+require 'directory_watcher'
 
 module RuhOh
+  class << self; attr_accessor :config end
+  
+  FMregex = /^---\n(.|\n)*---\n/
+  Config = Struct.new(
+    :site_source_path,
+    :database_folder,
+    :posts_path,
+    :posts_data_path,
+    :pages_data_path
+  )
+
+  # Public: Setup RuhOh utilities relative to the current directory
+  # of the application and its corresponding config.json file.
+  #
+  def self.setup
+    base_directory = Dir.getwd
+    config = File.open(File.join(base_directory, 'config.json'), "r").read
+    config = JSON.parse(config)
+
+    c = Config.new
+    c.site_source_path = File.join(base_directory, config['dataPath'])
+    c.database_folder = '_database'
+    c.posts_path = File.join(c.site_source_path, '_posts')
+    c.posts_data_path = File.join(c.site_source_path, c.database_folder, 'posts_dictionary.yml')
+    c.pages_data_path = File.join(c.site_source_path, c.database_folder, 'pages_dictionary.yml')
+    self.config = c
+  end
   
   module Posts
-
+    
     # Public: Generate the Posts dictionary.
     #
     def self.generate
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
       puts "=> Generating Posts"
 
-      dictionary, invalid_posts = self.process_posts
+      dictionary, invalid_posts = process_posts
       ordered_posts = []
       dictionary.each_value { |val| ordered_posts << val }
       
@@ -50,13 +52,13 @@ module RuhOh
       
       data = {
         'dictionary' => dictionary,
-        'chronological' => self.build_chronology(ordered_posts),
-        'collated' => self.collate(ordered_posts),
-        'tags' => self.parse_tags(ordered_posts),
-        'categories' => self.parse_categories(ordered_posts)
+        'chronological' => build_chronology(ordered_posts),
+        'collated' => collate(ordered_posts),
+        'tags' => parse_tags(ordered_posts),
+        'categories' => parse_categories(ordered_posts)
       }
 
-      open(JB::Path.build(:database, :node => 'posts_dictionary.yml'), 'w') { |page|
+      open(RuhOh.config.posts_data_path, 'w') { |page|
         page.puts data.to_yaml
       }
   
@@ -73,13 +75,13 @@ module RuhOh
       dictionary = {}
       invalid_posts = []
 
-      FileUtils.cd(JB::Path.build(:site_path, :node => "_posts" )) {
+      FileUtils.cd(RuhOh.config.posts_path) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]
 
           File.open(filename) do |page|
-            front_matter = page.read.match(FMregex)
+            front_matter = page.read.match(RuhOh::FMregex)
             if !front_matter
               invalid_posts << filename ; next
             end
@@ -197,19 +199,20 @@ module RuhOh
     # Public: Generate the Pages dictionary.
     #
     def self.generate
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
       puts "=> Generating pages"
 
       pages = []
       invalid_pages = []
       dictionary = {}
 
-      FileUtils.cd(JB::Path.build(:site_path)) {
+      FileUtils.cd(RuhOh.config.site_source_path) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]
 
           File.open(filename) do |page|
-            front_matter = page.read.match(FMregex)
+            front_matter = page.read.match(RuhOh::FMregex)
             if !front_matter
               invalid_pages << filename ; next
             end
@@ -224,7 +227,7 @@ module RuhOh
         }
       }
 
-       open(JB::Path.build(:database, :node => 'pages_dictionary.yml'), 'w') { |page|
+       open(RuhOh.config.pages_data_path, 'w') { |page|
          page.puts dictionary.to_yaml
        }
 
@@ -239,4 +242,53 @@ module RuhOh
 
   end # Page
   
-end # RuhOh
+  module Watch
+    
+    # Internal: Watch website source directory for file changes.
+    # The observer triggers data regeneration as files change
+    # in order to keep the data up to date in real time.
+    #
+    #  site_source - Required [String] Path to the root directory 
+    #    of the website source files.
+    #
+    # Returns: Nothing
+    def self.start
+      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.set_config(<base_directory>)" unless RuhOh.config
+      puts "=> Start watching: #{RuhOh.config.site_source_path}"
+      glob = ''
+      
+      # Watch all files + all sub directories except for special folders e.g '_database'
+      Dir.chdir(RuhOh.config.site_source_path) {
+        dirs = Dir['*'].select { |x| File.directory?(x) }
+        dirs -= [RuhOh.config.database_folder]
+        dirs = dirs.map { |x| "#{x}/**/*" }
+        dirs += ['*']
+        glob = dirs
+      }
+
+      dw = DirectoryWatcher.new(RuhOh.config.site_source_path, {
+        :glob => glob, 
+        :pre_load => true
+      })
+      dw.interval = 1
+      dw.add_observer {|*args| 
+        args.each {|event|
+          path = event['path'].gsub(RuhOh.config.site_source_path, '')
+
+          if path =~ /^\/?_posts/
+            RuhOh::Posts::generate
+          else
+            RuhOh::Pages::generate
+          end
+    
+          t = Time.now.strftime("%H:%M:%S")
+          puts "[#{t}] regeneration: #{args.size} files changed"
+        }
+      }
+
+      dw.start
+    end   
+
+  end  # Watch
+
+end # RuhOh  

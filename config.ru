@@ -1,20 +1,19 @@
 require 'rack'
-require './lib/generators'
-require './lib/watch'
+require './lib/ruhoh'
 
-SiteSource = "#{Dir.pwd}/sample_kit"
+RuhOh.setup
+RuhOh::Posts.generate
+RuhOh::Pages.generate
+RuhOh::Watch.start
 
-# Generate our data structures
-RuhOh::Posts::generate
-RuhOh::Pages::generate
-
-# Watch site files for changes.
-# Change events trigger data structure regeneration.
-RuhOh::Watch::start(SiteSource)
+site_source_folder = RuhOh.config.site_source_path.split('/').pop
 
 use Rack::Lint
 use Rack::ShowExceptions
-use Rack::Static, :urls => ['/_client', '/themes', '/sample_kit'], :root => '.'
+use Rack::Static, {
+  :root => '.',
+  :urls => ['/_client', '/themes', "/#{site_source_folder}", '/config.json']
+}
 
 run Proc.new { |env|
   [200, {'Content-Type' => 'text/html'}, [File.read('./index.html')]]
