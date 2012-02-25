@@ -18,11 +18,11 @@ module RuhOh
   )
 
   # Public: Setup RuhOh utilities relative to the current directory
-  # of the application and its corresponding config.json file.
+  # of the application and its corresponding ruhoh.json file.
   #
   def self.setup
     base_directory = Dir.getwd
-    config = File.open(File.join(base_directory, 'config.json'), "r").read
+    config = File.open(File.join(base_directory, 'ruhoh.json'), "r").read
     config = JSON.parse(config)
 
     c = Config.new

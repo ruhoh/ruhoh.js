@@ -31,7 +31,7 @@ define([
 
   var App = { 
     
-    // Public: Start the application using /config.json
+    // Public: Start the application using /ruhoh.json
     // Note we explicitely load as 'html' so we can manually process the JSON.
     // This is because jquery fails silently if JSON format is invalid.
     //
@@ -40,15 +40,15 @@ define([
       var that = this;
       $.ajax({
         type: 'GET',
-        url: "/config.json",
+        url: "/ruhoh.json",
         dataType: "html",
         cache : false
       }).done(function(config) {
           try { config = JSON.parse(config) }
           catch (e) {
             Log.parseError(
-              '/config.json', 
-              'Ensure config.json contains valid JSON.'
+              '/ruhoh.json', 
+              'Ensure ruhoh.json contains valid JSON.'
               + '<br>Validate your config at: <a href="http://jsonlint.com/">http://jsonlint.com/</a>'
             );
           }

@@ -12,7 +12,7 @@ use Rack::Lint
 use Rack::ShowExceptions
 use Rack::Static, {
   :root => '.',
-  :urls => ['/_client', '/themes', "/#{site_source_folder}", '/config.json']
+  :urls => ['/_client', '/themes', "/#{site_source_folder}", '/ruhoh.json']
 }
 
 run Proc.new { |env|
