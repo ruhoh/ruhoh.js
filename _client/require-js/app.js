@@ -31,13 +31,38 @@ define([
 
   var App = { 
     
-    init : function(appConfig, boot){
+    // Public: Start the application using /config.json
+    // Note we explicitely load as 'html' so we can manually process the JSON.
+    // This is because jquery fails silently if JSON format is invalid.
+    //
+    // Returns: Nothing
+    start : function(){
+      var that = this;
+      $.ajax({
+        type: 'GET',
+        url: "/config.json",
+        dataType: "html",
+        cache : false
+      }).done(function(config) {
+          try { config = JSON.parse(config) }
+          catch (e) {
+            Log.parseError(
+              '/config.json', 
+              'Ensure config.json contains valid JSON.'
+              + '<br>Validate your config at: <a href="http://jsonlint.com/">http://jsonlint.com/</a>'
+            );
+          }
+          
+          // Good to go
+          that.init(config)
+        })
+    },
+    
+    init : function(appConfig){
       this.appConfig = appConfig;
       this.preview = new Preview(null, this.appConfig);
       this.Router = new Router;
       this.initRouting();
-
-      if(typeof boot === "function") boot();
     },
     
     // Public: Setup Routing.
