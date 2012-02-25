@@ -1,5 +1,4 @@
 {
-  "theme" : "twitter",
-  "themePath" : "themes",
-  "dataPath" : "sample_kit"
+  "site_source" : "sample_kit",
+  "theme" : "twitter"
 }

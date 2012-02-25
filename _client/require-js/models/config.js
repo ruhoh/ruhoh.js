@@ -51,7 +51,7 @@ define([
     },
     
     getDataPath : function(path){
-      return this.getPath(this.get('dataPath'), path);
+      return this.getPath(this.get('site_source'), path);
     },
     
     // Internal: Normalizes a root domain into a well-formed URL.

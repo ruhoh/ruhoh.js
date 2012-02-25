@@ -26,7 +26,7 @@ module RuhOh
     config = JSON.parse(config)
 
     c = Config.new
-    c.site_source_path = File.join(base_directory, config['dataPath'])
+    c.site_source_path = File.join(base_directory, config['site_source'])
     c.database_folder = '_database'
     c.posts_path = File.join(c.site_source_path, '_posts')
     c.posts_data_path = File.join(c.site_source_path, c.database_folder, 'posts_dictionary.yml')
