@@ -162,7 +162,7 @@ define([
         output = $.mustache(this.page.master.get("content"), this.payload.attributes);
       }
 
-      $("body").html(output);
+      $(document).html(output);
     }
     
   
