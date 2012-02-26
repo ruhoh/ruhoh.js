@@ -12,9 +12,16 @@ use Rack::Lint
 use Rack::ShowExceptions
 use Rack::Static, {
   :root => '.',
-  :urls => ['/_client', "/#{site_source_folder}", '/ruhoh.json']
+  :urls => ['/_client', "/#{site_source_folder}"]
 }
 
 run Proc.new { |env|
-  [200, {'Content-Type' => 'text/html'}, [File.read('./index.html')]]
+  [ 
+    200, 
+    {
+      'Content-Type' => 'text/html', 
+      'x-ruhoh-site-source-folder' => site_source_folder
+    }, 
+    [File.read('./index.html')]
+  ]
 }

@@ -9,10 +9,26 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      this.set("basePath", (attrs.basePath || '/'));
-      this.set('postsDirectory', '_posts');
+      this.set({
+        'time' : new Date().toString(),
+        'basePath' : (attrs.basePath || '/'),
+        'postsDirectory' : '_posts',
+      })
       this.buildBasePath();
       this.bind("change:basePath", this.buildBasePath, this);
+    },
+
+    generate : function(){
+      return this.fetch({ dataType: "html", cache : false })
+    },
+
+    url : function(){
+      return this.get('site_source') +'/_config.yml';
+    },
+
+    parse : function(response){
+      this.set(jsyaml.load(response));
+      return this.attributes;
     },
     
     // Internal: Get a normalized, absolute path for the App Session.

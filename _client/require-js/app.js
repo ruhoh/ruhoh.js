@@ -15,7 +15,6 @@ define([
   'models/page',
   'models/payload',
   'models/preview',
-  'models/site',
   'models/partial',
 
   'collections/partials',
@@ -25,44 +24,30 @@ define([
   'markdown'
 ], function($, _, Backbone, Router, Parse, Log, yaml, 
   PagesDictionary, PostsDictionary, 
-  Config, Layout, Page, Payload, Preview, Site, Partial,
+  Config, Layout, Page, Payload, Preview, Partial,
   Partials,
   Handlebars, helpers, Markdown){
 
   var App = { 
     
-    // Public: Start the application using /ruhoh.json
-    // Note we explicitely load as 'html' so we can manually process the JSON.
-    // This is because jquery fails silently if JSON format is invalid.
+    // Public: Start the application relative to the site_source.
+    // The web-server is responsible for passing site_source in the Header.
+    // Once the site_source folder is known we can load _config.yml and start the app.
     //
     // Returns: Nothing
     start : function(){
       var that = this;
-      $.ajax({
-        type: 'GET',
-        url: "/ruhoh.json",
-        dataType: "html",
-        cache : false
-      }).done(function(config) {
-          try { config = JSON.parse(config) }
-          catch (e) {
-            Log.parseError(
-              '/ruhoh.json', 
-              'Ensure ruhoh.json contains valid JSON.'
-              + '<br>Validate your config at: <a href="http://jsonlint.com/">http://jsonlint.com/</a>'
-            );
-          }
-          
-          // Good to go
-          that.init(config)
-        })
-    },
-    
-    init : function(appConfig){
-      this.appConfig = appConfig;
-      this.preview = new Preview(null, this.appConfig);
-      this.Router = new Router;
-      this.initRouting();
+      
+      $.get('/').pipe(function(a,b,jqxhr){
+        that.config = new Config({'site_source' : '/' + jqxhr.getResponseHeader('x-ruhoh-site-source-folder') });
+        return that.config.generate();
+      }).done(function(){
+        that.preview = new Preview(null, that.config);
+        that.Router = new Router;
+        that.initRouting();
+      }).fail(function(jqxhr){
+        Log.loadError(this, jqxhr)
+      });
     },
     
     // Public: Setup Routing.
@@ -93,7 +78,7 @@ define([
       // Start Router.
       Backbone.history.start({
         pushState: true, 
-        root: (this.appConfig.basePath || '/')
+        root: (this.config.get('basePath') || '/')
       });
     }
 

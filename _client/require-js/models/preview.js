@@ -9,7 +9,6 @@ define([
   'models/config',
   'models/page',
   'models/layout',
-  'models/site',
   'models/payload',
   'models/partial',
   
@@ -20,7 +19,7 @@ define([
   'helpers',
 ], function($, _, Backbone, 
   PagesDictionary, PostsDictionary, 
-  Config, Page, Layout, Site, Payload, Partial,
+  Config, Page, Layout, Payload, Partial,
   Partials,
   Log, Handlebars){
 
@@ -40,14 +39,12 @@ define([
     page : Page,
     payload : Payload,
 
-    initialize : function(attrs, appConfig){
-      this.config = new Config(appConfig);
-
+    initialize : function(attrs, config){
+      this.config = config;
       this.page = new Page;
       this.page.sub = new Layout;
       this.page.master = new Layout;
       
-      this.site = new Site;
       this.payload = new Payload;
       this.pagesDictionary = new PagesDictionary;
       this.postsDictionary = new PostsDictionary;
@@ -57,7 +54,6 @@ define([
       this.page.config = this.config,
       this.page.sub.config = this.config,
       this.page.master.config = this.config,
-      this.site.config = this.config,
       this.payload.config = this.config,
       this.partials.config = this.config,
       this.pagesDictionary.config = this.config,
@@ -72,7 +68,6 @@ define([
       var that = this;
       $.when(
         this.page.generate(), 
-        this.site.generate(),
         this.partials.generate(),
         this.pagesDictionary.generate(),
         this.postsDictionary.generate()
@@ -86,8 +81,6 @@ define([
     
     // Build the payload.
     buildPayload : function(){
-      // jekyll compatability?
-      this.site.set("tags", this.postsDictionary.get('tags'));
       
       // Quick hack to set prev/next posts
       var position = this.postsDictionary.get('chronological').indexOf(this.page.get("id"))
@@ -98,7 +91,7 @@ define([
         }, {silent : true})
       
       this.payload.set({
-        "site" : this.site.attributes,
+        "config" : this.config.attributes,
         "page" : this.page.attributes,
         "pages" : this.pagesDictionary.attributes,
         "_posts" : this.postsDictionary.attributes,

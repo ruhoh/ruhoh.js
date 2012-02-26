@@ -32,14 +32,14 @@ define([
   // Returns: [String] - The parsed analytics template.
   Handlebars.registerHelper('analytics', function() {
     try{
-      var provider = this.site.JB.analytics.provider;
+      var provider = this.config.JB.analytics.provider;
     } catch(e) {
       Log.configError(
         '<br>In order to use {{{ analytics }}} ' +
         '<br>an analytics provider must be specified at: "site.JB.analytics.provider"'
       )
     }
-    return (this.site.production) 
+    return (this.config.production) 
       ? Handlebars.compile(Handlebars.partials['analytics.'+provider])(this)
       : '<p class="development-notice" style="background:lightblue">'+ provider +' Loaded!</p>';
   });  
@@ -54,7 +54,7 @@ define([
   // Returns: [String] - The parsed comments template.
   Handlebars.registerHelper('comments', function() {
     try{
-      var provider = this.site.JB.comments.provider;
+      var provider = this.config.JB.comments.provider;
     } catch(e) {
       Log.configError(
         '<br>In order to use {{{ comments }}}} ' +
@@ -62,7 +62,7 @@ define([
       )
     }
 
-    return (this.site.production) 
+    return (this.config.production) 
       ? Handlebars.compile(Handlebars.partials['comments.'+provider])(this)
       : '<p class="development-notice" style="background:orange">'+ provider +' Loaded!</p>';
   });
