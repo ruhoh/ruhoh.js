@@ -250,7 +250,6 @@ module RuhOh
       raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
       puts "=> Generating pages"
 
-      pages = []
       invalid_pages = []
       dictionary = {}
 
@@ -267,9 +266,8 @@ module RuhOh
 
             data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
             data['id'] = filename
-            data['url'] = filename
+            data['url'] = self.permalink(data)
 
-            pages << filename 
             dictionary[filename] = data
           end
         }
@@ -288,6 +286,15 @@ module RuhOh
       end    
     end
 
+    def self.permalink(page)
+      url = page['id'].gsub(File.extname(page['id']), '.html')
+      
+      # sanitize url
+      url = url.split('/').reject{ |part| part =~ /^\.+$/ }.join('/')
+      url += "/" if url =~ /\/$/
+      url
+    end
+    
   end # Page
   
   module Watch

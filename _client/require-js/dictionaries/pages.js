@@ -27,7 +27,14 @@ define([
     },
     
     parse : function(response){
-      this.set( jsyaml.load(response) );
+      data = jsyaml.load(response);
+      // Need to append the page id to urls for client-side rendering.
+      // i.e. We need to tell javascript where the file is.
+      for(id in data){
+        data[id]['url'] += ('?id='+ id)
+      }
+
+      this.set(data);
       return this.attributes;
     }
     
