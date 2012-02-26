@@ -267,6 +267,7 @@ module RuhOh
             data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
             data['id'] = filename
             data['url'] = self.permalink(data)
+            data['title'] = data['title'] || self.titleize(filename)
 
             dictionary[filename] = data
           end
@@ -286,6 +287,10 @@ module RuhOh
       end    
     end
 
+    def self.titleize(filename)
+      File.basename( filename, File.extname(filename) ).gsub(/[\W\_]/, ' ').gsub(/\b\w/){$&.upcase}
+    end
+    
     def self.permalink(page)
       url = page['id'].gsub(File.extname(page['id']), '.html')
       
