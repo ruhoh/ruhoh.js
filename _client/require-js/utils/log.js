@@ -21,6 +21,11 @@ define([
       throw(message);
     },
     
+    configError : function(message){
+      this.render('_config.yml', message, "Configuration Error");
+      throw(message);
+    },
+    
     // Public: Render a user friendly message into the DOM.
     // Returns: Nothing.
     render : function(fileId, message, type){
