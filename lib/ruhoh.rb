@@ -45,7 +45,7 @@ module RuhOh
     #
     def self.generate
       raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
-      puts "=> Generating Posts"
+      puts "=> Generating Posts..."
 
       dictionary, invalid_posts = process_posts
       ordered_posts = []
@@ -67,9 +67,8 @@ module RuhOh
         page.puts data.to_yaml
       }
   
-      puts "=> Posts Done!\n"
       if invalid_posts.empty?
-        puts "=> All posts processed!"
+        puts "=> #{dictionary.count}/#{dictionary.count + invalid_posts.count} posts processed."
       else
         puts "=> Invalid posts not processed:"
         puts invalid_posts.to_yaml
@@ -248,15 +247,16 @@ module RuhOh
     #
     def self.generate
       raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
-      puts "=> Generating pages"
+      puts "=> Generating Pages..."
 
       invalid_pages = []
       dictionary = {}
-
+      total_pages = 0
       FileUtils.cd(RuhOh.config.site_source_path) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]
+          total_pages += 1
 
           File.open(filename) do |page|
             front_matter = page.read.match(RuhOh::FMregex)
@@ -278,9 +278,8 @@ module RuhOh
          page.puts dictionary.to_yaml
        }
 
-      puts "=> Pages done!\n"
       if invalid_pages.empty?
-        puts "=> All pages processed!"
+        puts "=> #{total_pages - invalid_pages.count }/#{total_pages} pages processed."
       else
         puts "=> Invalid pages not processed:"
         puts invalid_pages.to_yaml
