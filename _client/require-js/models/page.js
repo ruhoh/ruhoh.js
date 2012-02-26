@@ -14,10 +14,7 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-      // when the url changes we need to update the ID
-      this.bind('change:url', function(){
-        this.set('id', this.get('url').replace(/^_posts\//,''), {silent : true})
-      }, this)
+     
     },
     
     // Public: Fetch a page/post and resolve all template dependencies.
@@ -45,7 +42,7 @@ define([
     },
     
     url : function(){
-      return this.config.getDataPath(this.get('url'));
+      return this.config.getDataPath(this.id);
     },
 
     // Parse the raw page/post file.

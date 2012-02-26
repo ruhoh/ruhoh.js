@@ -63,7 +63,7 @@ define([
       this.pagesDictionary.config = this.config,
       this.postsDictionary.config = this.config;
       
-      this.page.bind("change:url", function(){
+      this.page.bind("change:id", function(){
         this.generate();
       }, this)
     },

@@ -73,12 +73,14 @@ define([
       
       this.Router.bind("route:home", function(){
         that.preview.page.clear({silent : true})
-        that.preview.page.set("url", 'index.md')
+        that.preview.page.set('id', 'index.md')
       })
       
       this.Router.bind("route:page", function(page){
+        var id = page.split('?id=')[1] || page;
+        
         that.preview.page.clear({silent : true})
-        that.preview.page.set("url", page);
+        that.preview.page.set("id", id);
       })
       
       // Hand off all link events to the Router.

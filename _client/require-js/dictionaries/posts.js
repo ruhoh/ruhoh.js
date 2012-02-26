@@ -35,10 +35,10 @@ define([
 
     parse : function(response){
       var data = jsyaml.load(response) || {};
-      // set id and transform url for client-side rendering.
-      // i.e. we need 'real' paths so javascript can $.get it.
-      for(key in data['dictionary']){
-        data['dictionary'][key]['url'] = this.config.fileJoin(this.config.get('postsDirectory'), key)
+      // Need to append the posts id to urls for client-side rendering.
+      // i.e. We need to tell javascript where the file is.
+      for(id in data['dictionary']){
+        data['dictionary'][id]['url'] += ('?id='+ this.config.fileJoin(this.config.get('postsDirectory'), id))
       }
       
       this.set(data);
