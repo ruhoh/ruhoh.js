@@ -2,6 +2,7 @@ require 'yaml'
 require 'json'
 require 'time'
 require 'fileutils'
+require 'cgi'
 
 require 'directory_watcher'
 
@@ -14,7 +15,8 @@ module RuhOh
     :database_folder,
     :posts_path,
     :posts_data_path,
-    :pages_data_path
+    :pages_data_path,
+    :permalink
   )
 
   # Public: Setup RuhOh utilities relative to the current directory
@@ -31,11 +33,14 @@ module RuhOh
     c.posts_path = File.join(c.site_source_path, '_posts')
     c.posts_data_path = File.join(c.site_source_path, c.database_folder, 'posts_dictionary.yml')
     c.pages_data_path = File.join(c.site_source_path, c.database_folder, 'pages_dictionary.yml')
+    c.permalink = config['permalink'] || :date # default is date in jekyll
     self.config = c
   end
   
   module Posts
     
+    MATCHER = /^(.+\/)*(\d+-\d+-\d+)-(.*)(\.[^.]+)$/
+
     # Public: Generate the Posts dictionary.
     #
     def self.generate
@@ -86,11 +91,14 @@ module RuhOh
               invalid_posts << filename ; next
             end
         
-            data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+            post = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
             
+            m, path, file_date, file_slug, ext = *filename.match(MATCHER)
+            post['date'] = post['date'] || file_date
+
             ## Test for valid date
             begin 
-              Time.parse(data['date'])
+              Time.parse(post['date'])
             rescue
               puts "Invalid date format on: #{filename}"
               puts "Date should be: YYYY/MM/DD"
@@ -98,14 +106,54 @@ module RuhOh
               next
             end
             
-            data['id'] = filename
-            data['url'] = filename
-            dictionary[filename] = data
+            post['id'] = filename
+            post['title'] = post['title'] || self.titleize(file_slug)
+            post['url'] = self.permalink(post)
+            dictionary[filename] = post
           end
         }
       }
 
       [dictionary, invalid_posts]
+    end
+    
+    # my-post-title ===> My Post Title
+    def self.titleize(file_slug)
+      file_slug.gsub(/[\W\_]/, ' ').gsub(/\b\w/){$&.upcase}
+    end
+    
+    # Another blatently stolen method from Jekyll
+    def self.permalink(post)
+      date = Date.parse(post['date'])
+      title = post['title'].downcase.gsub(' ', '-').gsub('.','')
+      format = case (post['permalink'] || RuhOh.config.permalink)
+      when :pretty
+        "/:categories/:year/:month/:day/:title/"
+      when :none
+        "/:categories/:title.html"
+      when :date
+        "/:categories/:year/:month/:day/:title.html"
+      else
+        post['permalink'] || RuhOh.config.permalink
+      end
+      
+      url = {
+        "year"       => date.strftime("%Y"),
+        "month"      => date.strftime("%m"),
+        "day"        => date.strftime("%d"),
+        "title"      => CGI::escape(title),
+        "i_day"      => date.strftime("%d").to_i.to_s,
+        "i_month"    => date.strftime("%m").to_i.to_s,
+        "categories" => Array(post['categories'] || post['category']).join('/'),
+        "output_ext" => 'html' # what's this for?
+      }.inject(format) { |result, token|
+        result.gsub(/:#{Regexp.escape token.first}/, token.last)
+      }.gsub(/\/\//, "/")
+
+      # sanitize url
+      url = url.split('/').reject{ |part| part =~ /^\.+$/ }.join('/')
+      url += "/" if url =~ /\/$/
+      url
     end
     
     def self.build_chronology(posts)
@@ -166,7 +214,7 @@ module RuhOh
             tags[tag] = { 'count' => 1, 'name' => tag, 'posts' => [] }
           end 
 
-          tags[tag]['posts'] << post['url']
+          tags[tag]['posts'] << post['id']
         end
       end  
       tags
@@ -186,7 +234,7 @@ module RuhOh
             categories[cat] = { 'count' => 1, 'name' => cat, 'posts' => [] }
           end 
 
-          categories[cat]['posts'] << post['url']
+          categories[cat]['posts'] << post['id']
         end
       end  
       categories
