@@ -1,5 +1,5 @@
 require 'rack'
-require './lib/ruhoh'
+require './_lib/ruhoh'
 
 RuhOh.setup
 RuhOh::Posts.generate
