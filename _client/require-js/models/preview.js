@@ -24,7 +24,8 @@ define([
   Log, Handlebars){
 
   TemplateEngine = "Handlebars";
-  
+  ContentRegex = /\{\{\s*content\s*\}\}/i;
+
   // Preview object builds a preview of a given page/post
   //
   // There is only ever one preview at any given time.
@@ -110,24 +111,18 @@ define([
     // TODO: Include YAML Front Matter from the templates.
     // Returns: Nothing. The finished preview is rendered in the Browser.
     Handlebars : function(){
-      // Process the page/post content first.
-      var template = Handlebars.compile(this.page.get("content"));
-      var output = template(this.payload.attributes);
-      this.payload.set("content", output);
-      
-      // Process the page/post output into sub-template.
-      template = Handlebars.compile(this.page.sub.get("content"));
-      output = template(this.payload.attributes);
-      
+      var output = this.page.sub.get("content")
+        .replace(ContentRegex, this.page.get("content"));
+
       // An undefined master means the page/post layouts is only one deep.
       // This means it expects to load directly into a master template.
       if(this.page.master.id){
-        this.payload.set("content", output);
-        template = Handlebars.compile(this.page.master.get("content"));
-        output = template(this.payload.attributes);
+        output = this.page.master.get("content")
+          .replace(ContentRegex, output);
       }
-      
-      $("body").html(output);
+
+      var template = Handlebars.compile(output);
+      $("body").html( template(this.payload.attributes) );
     },
     
     // Public: Process content, sub+master templates then render the result.
