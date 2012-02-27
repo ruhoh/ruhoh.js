@@ -1,5 +1,9 @@
+*/
+!_client/
+!_scaffold/
+!lib/
+!hello-world/
+
 Thumbs.db
 .DS_Store
-!.gitkeep
-
 _client/r.js
