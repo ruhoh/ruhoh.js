@@ -203,6 +203,33 @@ define([
     return new Handlebars.SafeString(cache);
   });
   
+  // Internal: Register next helper 
+  // Returns the next (newer) post relative to the calling page.
+  //
+  // Returns: [String] - The parsed block content.
+  Handlebars.registerHelper('post_next', function(context, block) {
+    var template = block ? block.fn : context.fn;
+    var position = this._posts.chronological.indexOf(this.page.id);
+    var first = _.first(this._posts.chronological);
+    var cache = (position === -1 || this.page.id === first)
+      ? template.inverse({})
+      : template( this._posts.dictionary[ this._posts.chronological[position-1] ] );
+    return new Handlebars.SafeString(cache);
+  });
+  
+  // Internal: Register previous helper 
+  // Returns the previous (older) post relative to the calling page.
+  //
+  // Returns: [String] - The parsed block content.
+  Handlebars.registerHelper('post_previous', function(context, block) {
+    var template = block ? block.fn : context.fn;
+    var position = this._posts.chronological.indexOf(this.page.id);
+    var last = _.last(this._posts.chronological);
+    var cache = (position === -1 || this.page.id === last)
+      ? template.inverse({})
+      : template( this._posts.dictionary[ this._posts.chronological[position+1] ] );
+    return new Handlebars.SafeString(cache);
+  });
   
   return Handlebars;
 });
