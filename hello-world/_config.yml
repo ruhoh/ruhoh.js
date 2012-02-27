@@ -1,10 +1,8 @@
 # This is the default format. 
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink: /:categories/:year/:month/:day/:title 
+permalink: /:categories/:title
 
-exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-auto: true
-pygments: true
+theme : twitter
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
@@ -19,18 +17,12 @@ author :
   feedburner : feedname
 
 navigation :
-  -
-    archive.html
-  -
-    pages.md
-  -
-    tags.md
-  -
-    pages/about.md
-  -
-    pages/index.html
-  -
-    categories.html
+  - archive.html
+  - pages.md
+  - tags.md
+  - pages/about.md
+  - pages/index.html
+  - categories.html
       
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 

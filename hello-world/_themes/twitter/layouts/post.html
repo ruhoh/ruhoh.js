@@ -8,25 +8,23 @@ layout : default
 
 <div class="row">
   <div class="span10">
-    {{{ content }}}
+    {{ content }}
     <hr>
     <div class="pagination">
       <ul>
-        {{#page.previous}}
+        {{#post_previous}}
           <li class="prev"><a href="{{ url }}" title="{{ title }}">&larr; Previous</a></li>
-        {{/page.previous}}
-        {{^page.previous}}
+        {{else}}
           <li class="prev disabled"><a>&larr; Previous</a></li>
-        {{/page.previous}}
+        {{/post_previous}}
         
-          <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
+          <li><a href="/archive.html">Archive</a></li>
        
-        {{#page.next}}
+        {{#post_next}}
           <li class="next"><a href="{{ url }}" title="{{ title }}">Next &rarr;</a></li>
-        {{/page.next}}
-        {{^page.next}}
+        {{else}}
           <li class="next disabled"><a>Next &rarr;</a>
-        {{/page.next}}
+        {{/post_next}}
 
       </ul>
     </div>
