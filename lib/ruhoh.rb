@@ -16,7 +16,8 @@ module RuhOh
     :posts_path,
     :posts_data_path,
     :pages_data_path,
-    :permalink
+    :permalink,
+    :theme
   )
 
   # Public: Setup RuhOh utilities relative to the current directory
@@ -27,13 +28,16 @@ module RuhOh
     config = File.open(File.join(base_directory, 'ruhoh.json'), "r").read
     config = JSON.parse(config)
 
+    site_config = YAML.load_file( File.join(config['site_source'], '_config.yml') )
+    
     c = Config.new
     c.site_source_path = File.join(base_directory, config['site_source'])
     c.database_folder = '_database'
     c.posts_path = File.join(c.site_source_path, '_posts')
     c.posts_data_path = File.join(c.site_source_path, c.database_folder, 'posts_dictionary.yml')
     c.pages_data_path = File.join(c.site_source_path, c.database_folder, 'pages_dictionary.yml')
-    c.permalink = config['permalink'] || :date # default is date in jekyll
+    c.permalink = site_config['permalink'] || :date # default is date in jekyll
+    c.theme = site_config['theme']
     self.config = c
   end
   
