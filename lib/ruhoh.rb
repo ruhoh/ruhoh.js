@@ -291,11 +291,10 @@ module RuhOh
     end
     
     def self.permalink(page)
-      url = page['id'].gsub(File.extname(page['id']), '.html')
+      url = '/' + page['id'].gsub(File.extname(page['id']), '.html')
       
       # sanitize url
       url = url.split('/').reject{ |part| part =~ /^\.+$/ }.join('/')
-      url += "/" if url =~ /\/$/
       url
     end
     

@@ -14,7 +14,7 @@ end
 
 namespace :theme do
 
-  desc "Creat a new theme framework"
+  desc "Create a new theme framework"
   task :new do
     name = ENV['name']
     abort("Must specify a name for your website") unless name
