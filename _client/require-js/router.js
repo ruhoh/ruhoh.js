@@ -32,7 +32,9 @@ define([
       
       // Hand off all link events to the Router.
       $("body").find('a').live("click", function(e){
-        that.navigate($(this).attr("href"), {trigger: true});
+        if( _.isString($(this).attr("href")) )
+          that.navigate('/'+$(this).attr("href"), {trigger: true});
+        
         e.preventDefault();
         return false;
       });
