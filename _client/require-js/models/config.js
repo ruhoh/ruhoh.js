@@ -28,7 +28,14 @@ define([
 
     parse : function(response){
       this.set(jsyaml.load(response));
+      this.validateConfig();
       return this.attributes;
+    },
+    
+    // Ensure we have the required configuration settings.
+    validateConfig : function(){
+      if( !_.isString(this.get('theme')) )
+        Log.configError('theme is not set. <br> ex: theme : my-theme')
     },
     
     // Internal: Get a normalized, absolute path for the App Session.
