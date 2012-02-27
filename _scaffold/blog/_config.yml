@@ -1,0 +1,24 @@
+
+theme : 'stock'
+
+JB :
+  comments :
+    provider : false
+    disqus :
+      short_name : short_name
+    livefyre :
+      site_id : 123
+    intensedebate :
+      account : 123abc
+    facebook :
+      appid : 123
+      num_posts: 5
+      width: 580
+      colorscheme: light
+    
+  analytics :
+    provider : false
+    google : 
+        tracking_id : 'UA-123-12'
+    getclicky :
+      site_id :
