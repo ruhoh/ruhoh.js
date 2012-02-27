@@ -14,7 +14,10 @@ define([
   return Backbone.Model.extend({
 
     initialize : function(attrs){
-     
+
+     this.bind('change:path', function(){
+       this.set('id', this.get('path').replace(/^_posts\//, '') )
+     },this)
     },
     
     // Public: Fetch a page/post and resolve all template dependencies.
@@ -42,7 +45,7 @@ define([
     },
     
     url : function(){
-      return this.config.getDataPath(this.id);
+      return this.config.getDataPath(this.get('path'));
     },
 
     // Parse the raw page/post file.

@@ -83,7 +83,7 @@ define([
     buildPayload : function(){
       
       // Quick hack to set prev/next posts
-      var position = this.postsDictionary.get('chronological').indexOf(this.page.get("id"))
+      var position = this.postsDictionary.get('chronological').indexOf(this.page.id)
       if(position !== -1)
         this.page.set({
           "next" : this.postsDictionary.get('dictionary')[this.postsDictionary.get('chronological')[position+1]],

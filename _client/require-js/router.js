@@ -21,12 +21,12 @@ define([
       
       this.bind("route:home", function(){
         this.preview.page.clear({silent : true})
-        this.preview.page.set('id', 'index.md')
+        this.preview.page.set('path', 'index.md')
       }, this)
       
       this.bind("route:page", function(page){
         this.preview.page.clear({silent : true})
-        this.preview.page.set( 'id', (page.split('?id=')[1] || page) );
+        this.preview.page.set( 'path', (page.split('?path=')[1] || page) );
       }, this)
       
       

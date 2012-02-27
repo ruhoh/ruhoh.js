@@ -38,7 +38,7 @@ define([
       // Need to append the posts id to urls for client-side rendering.
       // i.e. We need to tell javascript where the file is.
       for(id in data['dictionary']){
-        data['dictionary'][id]['url'] += ('?id='+ this.config.fileJoin(this.config.get('postsDirectory'), id))
+        data['dictionary'][id]['url'] += ('?path='+ this.config.fileJoin(this.config.get('postsDirectory'), id))
       }
       
       this.set(data);
