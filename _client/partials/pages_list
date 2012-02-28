@@ -1,5 +1,7 @@
-{{#if isActivePage }}
-  <li class="active"><a href="{{url}}" class="active">{{title}}</a></li>
-{{ else }}
+{{#isActivePage }}
+  <li class="active"><a href="{{url}}" class="active">ACTIVE: {{title}}</a></li>
+{{/isActivePage}}
+
+{{^isActivePage}}
   <li><a href="{{url}}">{{title}}</a></li>
-{{/if}}
+{{/isActivePage }}

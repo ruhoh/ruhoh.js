@@ -3,7 +3,8 @@ Shameless port of a shameless port ^ 2
 @defunkt => @janl => @aq => @voodootikigod => @timruffles
  
 */
-define(function(){
+define(['ruhoh_helper'],function(RuhohHelper){
+
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
@@ -177,6 +178,13 @@ var Mustache = (typeof module !== "undefined" && module.exports) || {};
     var buffer = "";
     var value =  lookup(name, stack);
 
+    if(!value && name[0] === '?') {
+      var context = RuhohHelper.parseName(name)
+        ? lookup(RuhohHelper.parseName(name), stack)
+        : null;
+      value = RuhohHelper.query(name, context, stack[0]);
+    } 
+    
     if (inverted) {
       // From the spec: inverted sections may render text once based on the
       // inverse value of the key. That is, they will be rendered if the key
@@ -203,7 +211,6 @@ var Mustache = (typeof module !== "undefined" && module.exports) || {};
     } else if (value) {
       buffer += callback();
     }
-
     return buffer;
   }
 

@@ -13,7 +13,9 @@ define([
       this.set({
         buildUrl : function(){ 
           return function(name, render) {return render( "GUPPY" ) }
-        }
+        },
+        'navigation' : ['index.md', 'about.md', 'tags.md', 'pages/index.html'],
+        
       });
     }
   
