@@ -17,6 +17,7 @@ define([
     // [path, name]
     FrameworkPartials : [
       ['pages_list','pages_list'],
+      ['posts_list','posts_list'],
       ['tags_list','tags_list'],
       ['categories_list','categories_list'],
       ['posts_collate','posts_collate'],

@@ -1,5 +1,5 @@
 {{#isActivePage }}
-  <li class="active"><a href="{{url}}" class="active">ACTIVE: {{title}}</a></li>
+  <li class="active"><a href="{{url}}" class="active">&rarr; {{title}}</a></li>
 {{/isActivePage}}
 
 {{^isActivePage}}
