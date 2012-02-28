@@ -120,8 +120,13 @@ define([
     // TODO: Include YAML Front Matter from the templates.
     // Returns: Nothing. The finished preview is rendered in the Browser.
     Mustache : function(output){
-      output = Mustache.render(output, this.payload.attributes);
-      $('body').html(output);
+      $('body').html(
+        Mustache.render(
+          output, 
+          this.payload.attributes, 
+          this.partials.toHash()
+        )
+      );
     }
     
   

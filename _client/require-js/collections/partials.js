@@ -47,6 +47,14 @@ define([
       }, this)
 
       return $.when.apply(this, dfds);
+    },
+    
+    toHash : function(){
+      var hash = {}
+      _.each(this.toJSON(), function(p){
+        hash[p.id] = p.content;
+      })
+      return hash;
     }
     
   });

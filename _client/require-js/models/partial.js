@@ -18,7 +18,7 @@ define([
     },
     
     parse : function(data){
-      Handlebars.registerPartial(this.id, data);
+      this.set('content', data);
       return this.attributes;
     }
     
