@@ -15,15 +15,15 @@ define([
   'collections/partials',
   
   'utils/log',
-  'handlebars',
+  'mustache',
   'helpers',
 ], function($, _, Backbone, 
   PagesDictionary, PostsDictionary, 
   Config, Page, Layout, Payload, Partial,
   Partials,
-  Log, Handlebars){
+  Log, Mustache){
 
-  TemplateEngine = "Handlebars";
+  TemplateEngine = "Mustache";
   ContentRegex = /\{\{\s*content\s*\}\}/i;
 
   // Preview object builds a preview of a given page/post
@@ -94,14 +94,6 @@ define([
     },
 
     process : function(){
-      this[TemplateEngine]();
-    },
-    
-    // Public: Process content, sub+master templates then render the result.
-    //  
-    // TODO: Include YAML Front Matter from the templates.
-    // Returns: Nothing. The finished preview is rendered in the Browser.
-    Handlebars : function(){
       var output = this.page.sub.get("content")
         .replace(ContentRegex, this.page.get("content"));
 
@@ -111,37 +103,25 @@ define([
         output = this.page.master.get("content")
           .replace(ContentRegex, output);
       }
-
-      var template = Handlebars.compile(output);
-      $("body").html( template(this.payload.attributes) );
+      this[TemplateEngine](output);
     },
     
     // Public: Process content, sub+master templates then render the result.
     //  
     // TODO: Include YAML Front Matter from the templates.
     // Returns: Nothing. The finished preview is rendered in the Browser.
-    Mustache : function(){
-      // Process the page/post content first.
-      // Then set the result as {{content}} for sub-template.
-      var output = $.mustache(this.page.get("content"), this.payload.attributes);
-      this.payload.set("content", output);
-
-      // Process the page/post output into sub-template.
-      output = $.mustache(this.page.sub.get("content"), this.payload.attributes);
-
-      // An undefined master means the page/post layouts is only one deep.
-      // This means it expects to load directly into a master template.
-      if(this.page.master.id){
-
-        // Set processed *page/post+sub-template* as content for master-template.
-        this.payload.set("content", output);
-
-        // Process the master template with post+sub-template
-        // Render the result into the browser.
-        output = $.mustache(this.page.master.get("content"), this.payload.attributes);
-      }
-
-      $(document).html(output);
+    Handlebars : function(output){
+      var template = Handlebars.compile(output);
+      $(document).html( template(this.payload.attributes) );
+    },
+    
+    // Public: Process content, sub+master templates then render the result.
+    //  
+    // TODO: Include YAML Front Matter from the templates.
+    // Returns: Nothing. The finished preview is rendered in the Browser.
+    Mustache : function(output){
+      output = Mustache.render(output, this.payload.attributes);
+      $('body').html(output);
     }
     
   

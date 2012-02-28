@@ -8,6 +8,7 @@ require.config({
     'store': 'libs/backbone-localstorage', // AMD support
     'yaml' : 'libs/js-yaml',
     'handlebars' : 'libs/handlebars',
+    'mustache' : 'libs/mustache',
     'markdown' : 'libs/markdown/Markdown.Converter'
   }  
 });
