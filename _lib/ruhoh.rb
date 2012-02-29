@@ -5,11 +5,14 @@ require 'fileutils'
 require 'cgi'
 
 require 'directory_watcher'
+require 'mustache'
 
 module RuhOh
   class << self; attr_accessor :config end
   
   FMregex = /^---\n(.|\n)*---\n/
+  ContentRegex = /\{\{\s*content\s*\}\}/i
+
   Config = Struct.new(
     :site_source_path,
     :database_folder,
@@ -20,6 +23,18 @@ module RuhOh
     :theme
   )
 
+
+  def self.parse_file(file_path)
+    page = File.open(file_path).read
+    front_matter = page.match(RuhOh::FMregex)
+    raise "Invalid Frontmatter" unless front_matter
+
+    data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+    content = page.gsub(FMregex, '')
+    
+    [data, content]
+  end
+  
   # Public: Setup RuhOh utilities relative to the current directory
   # of the application and its corresponding ruhoh.json file.
   #
@@ -40,6 +55,128 @@ module RuhOh
     c.theme = site_config['theme']
     self.config = c
   end
+  
+  module Generate
+
+    class RMustache < Mustache
+
+      class RContext < Context
+        
+        # Overload find method to catch helper expressions
+        def find(obj, key, default = nil)
+          return super unless key.to_s.index('?')
+          
+          puts "=> Executing helper: #{key}"
+          context, helper = key.to_s.split('?')
+          context = context.empty? ? obj : super(obj, context)
+
+          self.mustache_in_stack.__send__ helper, context
+        end  
+
+      end #RContext
+
+      def context
+        @context ||= RContext.new(self)
+      end
+      
+      def tags_list(sub_context)
+        if sub_context.is_a?(Array)
+          sub_context.map { |id|
+            self.context['_posts']['tags'][id] if self.context['_posts']['tags'][id]
+          }
+        else
+          tags = []
+          self.context['_posts']['tags'].each_value { |tag|
+            tags << tag
+          }
+          tags
+        end
+      end
+      
+      def posts_list(sub_context)
+        sub_context = sub_context.is_a?(Array) ? sub_context : self.context['_posts']['chronological']
+        
+        sub_context.map { |id|
+          self.context['_posts']['dictionary'][id] if self.context['_posts']['dictionary'][id]
+        }
+      end
+      
+      def pages_list(sub_context)
+        puts "=> call: pages_list with context: #{sub_context}"
+        pages = []
+        if sub_context.is_a?(Array) 
+          sub_context.each do |id|
+            if self.context[:pages][id]
+              pages << self.context[:pages][id]
+            end
+          end
+        else
+          self.context[:pages].each_value {|page| pages << page }
+        end
+        pages
+      end
+      
+    end
+    
+    def self.go
+      sub = nil
+      master = nil
+      theme_path = File.join(RuhOh.config.site_source_path, '_themes', RuhOh.config.theme)
+
+      pages = YAML.load_file(RuhOh.config.pages_data_path)
+      posts = YAML.load_file(RuhOh.config.posts_data_path)
+      config = YAML.load_file( File.join(RuhOh.config.site_source_path, '_config.yml') )
+      asset_path = File.join('/_themes', RuhOh.config.theme )
+      
+      page = pages['about.md']
+      content = File.open(File.join( RuhOh.config.site_source_path, page['id']) ).read
+      page['content'] = content.gsub(FMregex, '')
+      
+      sub = File.join( theme_path, 'layouts', "#{page['layout']}.html")
+      sub = RuhOh::parse_file(sub)
+      
+      if sub[0]['layout']
+        master = File.join( theme_path, 'layouts', "#{sub[0]['layout']}.html")
+        master = RuhOh::parse_file(master)
+      end
+
+      payload = {
+        "config" => config,
+        "page" => page,
+        "pages" => pages,
+        "_posts" => posts,
+        "ASSET_PATH" => asset_path,
+      }
+
+      output = sub[1].gsub(ContentRegex, page["content"])
+
+      # An undefined master means the page/post layouts is only one deep.
+      # This means it expects to load directly into a master template.
+      if master[1]
+        output = master[1].gsub(ContentRegex, output);
+      end
+      
+      #RMustache.raise_on_context_miss = true
+      test = '<ul class="nav">
+      {{# ?tags_list }}
+        <li><a href="#">{{name}} {{count}}</a></li>
+      {{/ ?tags_list }}
+      </ul>'
+      
+      test = '
+      {{#?tags_list}}
+        <h2 id="{{name}}-ref">{{name}}</h2>
+        {{#posts?posts_list}}
+          <li><a href="{{url}}">{{title}}</a></li>
+        {{/posts?posts_list}}
+      {{/?tags_list}}
+      '
+      puts RMustache.render(test, payload)
+      #puts Mustache.render(output, payload)
+    end
+    
+  end
+  
   
   module Posts
     

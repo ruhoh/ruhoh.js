@@ -1,4 +1,8 @@
 
+task :m do
+  RuhOh::Generate.go
+end
+
 namespace :site do
   
   desc "Create a new website framework"
