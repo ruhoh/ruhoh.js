@@ -7,7 +7,7 @@ require 'cgi'
 require 'directory_watcher'
 require 'mustache'
 
-module RuhOh
+module Ruhoh
   class << self; attr_accessor :config end
   
   FMregex = /^---\n(.|\n)*---\n/
@@ -23,7 +23,7 @@ module RuhOh
     :theme
   )
 
-  # Public: Setup RuhOh utilities relative to the current directory
+  # Public: Setup Ruhoh utilities relative to the current directory
   # of the application and its corresponding ruhoh.json file.
   #
   def self.setup
@@ -110,23 +110,23 @@ module RuhOh
     def self.go
       sub = nil
       master = nil
-      theme_path = File.join(RuhOh.config.site_source_path, '_themes', RuhOh.config.theme)
+      theme_path = File.join(Ruhoh.config.site_source_path, '_themes', Ruhoh.config.theme)
 
-      pages = YAML.load_file(RuhOh.config.pages_data_path)
-      posts = YAML.load_file(RuhOh.config.posts_data_path)
-      config = YAML.load_file( File.join(RuhOh.config.site_source_path, '_config.yml') )
-      asset_path = File.join('/_themes', RuhOh.config.theme )
+      pages = YAML.load_file(Ruhoh.config.pages_data_path)
+      posts = YAML.load_file(Ruhoh.config.posts_data_path)
+      config = YAML.load_file( File.join(Ruhoh.config.site_source_path, '_config.yml') )
+      asset_path = File.join('/_themes', Ruhoh.config.theme )
       
       page = pages['about.md']
-      content = File.open(File.join( RuhOh.config.site_source_path, page['id']) ).read
+      content = File.open(File.join( Ruhoh.config.site_source_path, page['id']) ).read
       page['content'] = content.gsub(FMregex, '')
       
       sub = File.join( theme_path, 'layouts', "#{page['layout']}.html")
-      sub = RuhOh::Utils.parse_file(sub)
+      sub = Ruhoh::Utils.parse_file(sub)
       
       if sub[0]['layout']
         master = File.join( theme_path, 'layouts', "#{sub[0]['layout']}.html")
-        master = RuhOh::Utils.parse_file(master)
+        master = Ruhoh::Utils.parse_file(master)
       end
 
       payload = {
@@ -166,7 +166,7 @@ module RuhOh
     # Public: Generate the Posts dictionary.
     #
     def self.generate
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
+      raise "Ruhoh.config cannot be nil.\n To set config call: Ruhoh.setup" unless Ruhoh.config
       puts "=> Generating Posts..."
 
       dictionary, invalid_posts = process_posts
@@ -185,7 +185,7 @@ module RuhOh
         'categories' => parse_categories(ordered_posts)
       }
 
-      open(RuhOh.config.posts_data_path, 'w') { |page|
+      open(Ruhoh.config.posts_data_path, 'w') { |page|
         page.puts data.to_yaml
       }
   
@@ -201,13 +201,13 @@ module RuhOh
       dictionary = {}
       invalid_posts = []
 
-      FileUtils.cd(RuhOh.config.posts_path) {
+      FileUtils.cd(Ruhoh.config.posts_path) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]
 
           File.open(filename) do |page|
-            front_matter = page.read.match(RuhOh::FMregex)
+            front_matter = page.read.match(Ruhoh::FMregex)
             if !front_matter
               invalid_posts << filename ; next
             end
@@ -247,7 +247,7 @@ module RuhOh
     def self.permalink(post)
       date = Date.parse(post['date'])
       title = post['title'].downcase.gsub(' ', '-').gsub('.','')
-      format = case (post['permalink'] || RuhOh.config.permalink)
+      format = case (post['permalink'] || Ruhoh.config.permalink)
       when :pretty
         "/:categories/:year/:month/:day/:title/"
       when :none
@@ -255,7 +255,7 @@ module RuhOh
       when :date
         "/:categories/:year/:month/:day/:title.html"
       else
-        post['permalink'] || RuhOh.config.permalink
+        post['permalink'] || Ruhoh.config.permalink
       end
       
       url = {
@@ -368,20 +368,20 @@ module RuhOh
     # Public: Generate the Pages dictionary.
     #
     def self.generate
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
+      raise "Ruhoh.config cannot be nil.\n To set config call: Ruhoh.setup" unless Ruhoh.config
       puts "=> Generating Pages..."
 
       invalid_pages = []
       dictionary = {}
       total_pages = 0
-      FileUtils.cd(RuhOh.config.site_source_path) {
+      FileUtils.cd(Ruhoh.config.site_source_path) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]
           total_pages += 1
 
           File.open(filename) do |page|
-            front_matter = page.read.match(RuhOh::FMregex)
+            front_matter = page.read.match(Ruhoh::FMregex)
             if !front_matter
               invalid_pages << filename ; next
             end
@@ -396,7 +396,7 @@ module RuhOh
         }
       }
 
-       open(RuhOh.config.pages_data_path, 'w') { |page|
+       open(Ruhoh.config.pages_data_path, 'w') { |page|
          page.puts dictionary.to_yaml
        }
 
@@ -433,32 +433,32 @@ module RuhOh
     #
     # Returns: Nothing
     def self.start
-      raise "RuhOh.config cannot be nil.\n To set config call: RuhOh.setup" unless RuhOh.config
-      puts "=> Start watching: #{RuhOh.config.site_source_path}"
+      raise "Ruhoh.config cannot be nil.\n To set config call: Ruhoh.setup" unless Ruhoh.config
+      puts "=> Start watching: #{Ruhoh.config.site_source_path}"
       glob = ''
       
       # Watch all files + all sub directories except for special folders e.g '_database'
-      Dir.chdir(RuhOh.config.site_source_path) {
+      Dir.chdir(Ruhoh.config.site_source_path) {
         dirs = Dir['*'].select { |x| File.directory?(x) }
-        dirs -= [RuhOh.config.database_folder]
+        dirs -= [Ruhoh.config.database_folder]
         dirs = dirs.map { |x| "#{x}/**/*" }
         dirs += ['*']
         glob = dirs
       }
 
-      dw = DirectoryWatcher.new(RuhOh.config.site_source_path, {
+      dw = DirectoryWatcher.new(Ruhoh.config.site_source_path, {
         :glob => glob, 
         :pre_load => true
       })
       dw.interval = 1
       dw.add_observer {|*args| 
         args.each {|event|
-          path = event['path'].gsub(RuhOh.config.site_source_path, '')
+          path = event['path'].gsub(Ruhoh.config.site_source_path, '')
 
           if path =~ /^\/?_posts/
-            RuhOh::Posts::generate
+            Ruhoh::Posts::generate
           else
-            RuhOh::Pages::generate
+            Ruhoh::Pages::generate
           end
     
           t = Time.now.strftime("%H:%M:%S")
@@ -475,7 +475,7 @@ module RuhOh
 
     def self.parse_file(file_path)
       page = File.open(file_path).read
-      front_matter = page.match(RuhOh::FMregex)
+      front_matter = page.match(Ruhoh::FMregex)
       raise "Invalid Frontmatter" unless front_matter
 
       data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
@@ -486,4 +486,4 @@ module RuhOh
   
   end
   
-end # RuhOh  
+end # Ruhoh  

@@ -1,12 +1,12 @@
 require 'rack'
 require './_lib/ruhoh'
 
-RuhOh.setup
-RuhOh::Posts.generate
-RuhOh::Pages.generate
-RuhOh::Watch.start
+Ruhoh.setup
+Ruhoh::Posts.generate
+Ruhoh::Pages.generate
+Ruhoh::Watch.start
 
-site_source_folder = RuhOh.config.site_source_path.split('/').pop
+site_source_folder = Ruhoh.config.site_source_path.split('/').pop
 
 use Rack::Lint
 use Rack::ShowExceptions

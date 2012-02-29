@@ -1,6 +1,6 @@
 
 task :m do
-  RuhOh::Generate.go
+  Ruhoh::Generate.go
 end
 
 namespace :site do
@@ -23,7 +23,7 @@ namespace :theme do
     name = ENV['name']
     abort("Must specify a name for your website") unless name
     
-    new_theme_path = "#{RuhOh.config.site_source_path}/_themes/#{name}"
+    new_theme_path = "#{Ruhoh.config.site_source_path}/_themes/#{name}"
     FileUtils.cp_r('./_scaffold/theme', new_theme_path)
   end
 
@@ -40,11 +40,11 @@ namespace :generate do
   task :all => ['pages', 'posts']
 
   task :pages do 
-    RuhOh::Pages::generate
+    Ruhoh::Pages::generate
   end
   
   task :posts do
-    RuhOh::Posts::generate
+    Ruhoh::Posts::generate
   end
 
 end  
