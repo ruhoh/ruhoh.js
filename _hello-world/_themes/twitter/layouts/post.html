@@ -38,9 +38,9 @@ layout : default
 
     <h4>Tags</h4>
     <ul class="tag_box">
-    {{#tags_list page.tags}}
+    {{# page.tags?to_tags }}
       {{> tags_list }}
-    {{/tags_list }}
+    {{/ page.tags?to_tags }}
     </ul>
   </div>
 </div>

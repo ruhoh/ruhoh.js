@@ -5,12 +5,12 @@ tagline : The sample kit homepage
 ---
 
 
-### posts_list
+### to_posts
 
 <ul>
-{{#posts_list}}
+{{#?to_posts}}
   <li><a href="{{url}}">{{title}}</a></li>
-{{/posts_list}}
+{{/?to_posts}}
 </ul>
 
 ### JB/analytics
@@ -31,9 +31,9 @@ tagline : The sample kit homepage
 ### JB/pages_list
 
 <ul>
-{{#pages_list site.navigation}}
+{{# config.navigation?to_pages }}
   {{> pages_list }}
-{{/pages_list}}  
+{{/ config.navigation?to_pages }}  
 </ul>
 
     {% assign pages_list = site.pages %}
@@ -43,17 +43,17 @@ tagline : The sample kit homepage
 
 ### JB/posts_collate
 
-{{#posts_collate}}
+{{# _posts.collated }}
 <h2>{{year}}</h2>
 {{#months}}
   <h3>{{month}}</h3>
   <ul>
-    {{#posts}}
+    {{# posts }}
     <li><span>{{date}}</span> &raquo; <a href="{{url}}">{{title}}</a></li>
-    {{/posts}}
+    {{/ posts }}
   </ul>
 {{/months}}
-{{/posts_collate}}
+{{/ _posts.collated }}
 
     {% assign posts_collate = site.posts %}
     {% include JB/posts_collate %}

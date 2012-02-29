@@ -8,7 +8,7 @@ group: navigation
 ## All Pages
 
 <ul>
-{{#pages_list}}
+{{# ?to_pages }}
   {{> pages_list }}
-{{/pages_list}}
+{{/ ?to_pages }}
 </ul>

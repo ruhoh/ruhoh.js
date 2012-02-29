@@ -17,11 +17,11 @@
   <div class="topbar">
     <div class="fill">
       <div class="container">
-        <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+        <a class="brand" href="/">{{ config.title }}</a>
         <ul class="nav">
-        {{#pages_list pages}}
+        {{# config.navigation?to_pages }}
           {{> pages_list }}
-        {{/pages_list}}
+        {{/ config.navigation?to_pages }}
         </ul>
       </div>
     </div>
@@ -30,11 +30,11 @@
   <div class="container">
 
     <div class="content">
-      {{ content }} adfad
+      {{ content }}
     </div>
 
     <footer>
-      <p>&copy; {{ site.author.name }} 2012 
+      <p>&copy; {{ config.author.name }} 2012 
         with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
         and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
       </p>

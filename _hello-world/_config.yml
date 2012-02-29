@@ -17,12 +17,13 @@ author :
   feedburner : feedname
 
 navigation :
+  - index.md
   - archive.html
   - pages.md
   - tags.md
+  - categories.html
   - pages/about.md
   - pages/index.html
-  - categories.html
       
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 

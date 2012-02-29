@@ -6,16 +6,16 @@ group: navigation
 ---
 
 <ul class="tag_box inline">
-{{#categories_list}}
-  {{>categories_list}}
-{{/categories_list}}
+{{# ?to_categories }}
+  {{> categories_list }}
+{{/ ?to_categories }}
 </ul>
 
-{{#categories_list}}
+{{# ?to_categories }}
   <h2>{{ name }} ({{ count }})</h2>
   <ul>
-    {{#posts}}
-    <li>{{.}}</li>
-    {{/posts}}
+    {{# posts?to_posts }}
+      {{> posts_list }}
+    {{/ posts?to_posts }}
   </ul>
-{{/categories_list}}
+{{/ ?to_categories }}
