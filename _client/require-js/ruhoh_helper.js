@@ -19,7 +19,7 @@ define([
         return this[helper](context, stack)
     },
     
-    pages_list : function(context, stack){
+    to_pages : function(context, stack){
       var pages = [];
       if ( _.isArray(context) )
         _.each(context, function(id){
@@ -34,7 +34,7 @@ define([
       })
     },
     
-    tags_list : function(context, stack){
+    to_tags : function(context, stack){
       return _.isArray(context)
         ?  _.map(context, function(name){
              if(stack._posts.tags[name])
@@ -45,7 +45,7 @@ define([
            })
     },
     
-    posts_list : function(context, stack){
+    to_posts : function(context, stack){
       return _.map(
           _.isArray(context) 
             ? context 
@@ -57,7 +57,7 @@ define([
         )
     },
     
-    categories_list : function(context, stack){
+    to_categories : function(context, stack){
       return _.isArray(context)
         ?  _.map(context, function(name){
              if(stack._posts.categories[name])

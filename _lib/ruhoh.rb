@@ -86,7 +86,7 @@ module Ruhoh
       self.partials[name.to_s]
     end
     
-    def tags_list(sub_context)
+    def to_tags(sub_context)
       if sub_context.is_a?(Array)
         sub_context.map { |id|
           self.context['_posts']['tags'][id] if self.context['_posts']['tags'][id]
@@ -100,7 +100,7 @@ module Ruhoh
       end
     end
     
-    def posts_list(sub_context)
+    def to_posts(sub_context)
       sub_context = sub_context.is_a?(Array) ? sub_context : self.context['_posts']['chronological']
       
       sub_context.map { |id|
@@ -108,7 +108,7 @@ module Ruhoh
       }
     end
     
-    def pages_list(sub_context)
+    def to_pages(sub_context)
       puts "=> call: pages_list with context: #{sub_context}"
       pages = []
       if sub_context.is_a?(Array) 
@@ -167,9 +167,9 @@ module Ruhoh
       end
       
       test = '
-      {{#?tags_list}}
+      {{# ?to_tags }}
         {{> tags_list }}
-      {{/?tags_list}}
+      {{/ ?to_tags }}
       '
       puts HelperMustache.render(test, payload)
     end
