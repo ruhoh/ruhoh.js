@@ -177,10 +177,9 @@ var Mustache = (typeof module !== "undefined" && module.exports) || {};
   function renderSection(name, stack, callback, inverted) {
     var buffer = "";
     var value =  lookup(name, stack);
-
-    if(!value && name[0] === '?') {
-      var context = RuhohHelper.parseName(name)
-        ? lookup(RuhohHelper.parseName(name), stack)
+    if(!value && name.indexOf('?') !== -1) {
+      var context = RuhohHelper.parseContext(name)
+        ? lookup(RuhohHelper.parseContext(name), stack)
         : null;
       value = RuhohHelper.query(name, context, stack[0]);
     } 

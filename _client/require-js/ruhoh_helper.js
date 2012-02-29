@@ -6,17 +6,15 @@ define([
   return {
     
     // parse the mustache expression's name
-    parseName : function(name){
-      return name.split(':')[1] || null;
+    parseContext : function(tagName){
+      return tagName.split('?')[0] || null;
     },
     
     // Query based on helper name 
     // Helpers must start with "?"
     // If we can't find anything it's important to return undefined.
     query : function(name, context, stack){
-      console.log('querying: ' + name);
-      var helper = name.split(':')[0].replace(/^\?/,'');
-      
+      var helper = name.split('?')[1];
       if(helper && typeof this[helper] === 'function')
         return this[helper](context, stack)
     },
