@@ -1,0 +1,46 @@
+[
+  {
+    "name" : "pages_list",
+    "path" : "pages_list"
+  },
+  {
+    "name" : "posts_list",
+    "path" : "posts_list"  
+  },
+  {
+    "name" : "tags_list",
+    "path" : "tags_list"
+  },
+  {
+    "name" : "categories_list",
+    "path" : "categories_list"
+  },
+  {  
+    "name" : "posts_collate",
+    "path" : "posts_collate"
+  },
+  {  
+    "name" : "analytics.google",
+    "path" : "analytics-providers/google"
+  },
+  {  
+    "name" : "analytics.getclicky",
+    "path" : "analytics-providers/getclicky"
+  },
+  {  
+    "name" : "comments.disqus",
+    "path" : "comments-providers/disqus"
+  },
+  {  
+    "name" : "comments.intensedebate",
+    "path" : "comments-providers/intensedebate"
+  },
+  {  
+    "name" : "comments.livefyre",
+    "path" : "comments-providers/livefyre"
+  },
+  {
+    "name" : "comments.facebook",
+    "path" : "comments-providers/facebook"
+  }
+]

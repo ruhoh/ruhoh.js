@@ -43,6 +43,19 @@ module Ruhoh
     c.theme = site_config['theme']
     self.config = c
   end
+
+  def self.partials
+    partials_path = './_client/partials'
+    partials_manifest = JSON.parse(File.open("#{partials_path}/manifest.json").read)
+    partials = {}
+    FileUtils.cd(partials_path) {
+      partials_manifest.each do |p|
+        next unless File.exist? p['path']
+        partials[p['name']] = File.open(p['path']).read
+      end  
+    }
+    partials
+  end
   
   class HelperMustache < Mustache
 
@@ -60,9 +73,17 @@ module Ruhoh
       end  
 
     end #HelperContext
-
+    
     def context
       @context ||= HelperContext.new(self)
+    end
+    
+    def partials
+      @partials ||= Ruhoh.partials
+    end
+    
+    def partial(name)
+      self.partials[name.to_s]
     end
     
     def tags_list(sub_context)
@@ -106,7 +127,7 @@ module Ruhoh
   
   
   module Generate
-
+    
     def self.go
       sub = nil
       master = nil
@@ -147,10 +168,7 @@ module Ruhoh
       
       test = '
       {{#?tags_list}}
-        <h2 id="{{name}}-ref">{{name}}</h2>
-        {{#posts?posts_list}}
-          <li><a href="{{url}}">{{title}}</a></li>
-        {{/posts?posts_list}}
+        {{> tags_list }}
       {{/?tags_list}}
       '
       puts HelperMustache.render(test, payload)
