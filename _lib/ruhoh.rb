@@ -23,18 +23,6 @@ module RuhOh
     :theme
   )
 
-
-  def self.parse_file(file_path)
-    page = File.open(file_path).read
-    front_matter = page.match(RuhOh::FMregex)
-    raise "Invalid Frontmatter" unless front_matter
-
-    data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
-    content = page.gsub(FMregex, '')
-    
-    [data, content]
-  end
-  
   # Public: Setup RuhOh utilities relative to the current directory
   # of the application and its corresponding ruhoh.json file.
   #
@@ -56,68 +44,69 @@ module RuhOh
     self.config = c
   end
   
-  module Generate
+  class HelperMustache < Mustache
 
-    class RMustache < Mustache
-
-      class RContext < Context
+    class HelperContext < Context
+      
+      # Overload find method to catch helper expressions
+      def find(obj, key, default = nil)
+        return super unless key.to_s.index('?')
         
-        # Overload find method to catch helper expressions
-        def find(obj, key, default = nil)
-          return super unless key.to_s.index('?')
-          
-          puts "=> Executing helper: #{key}"
-          context, helper = key.to_s.split('?')
-          context = context.empty? ? obj : super(obj, context)
+        puts "=> Executing helper: #{key}"
+        context, helper = key.to_s.split('?')
+        context = context.empty? ? obj : super(obj, context)
 
-          self.mustache_in_stack.__send__ helper, context
-        end  
+        self.mustache_in_stack.__send__ helper, context
+      end  
 
-      end #RContext
+    end #HelperContext
 
-      def context
-        @context ||= RContext.new(self)
-      end
-      
-      def tags_list(sub_context)
-        if sub_context.is_a?(Array)
-          sub_context.map { |id|
-            self.context['_posts']['tags'][id] if self.context['_posts']['tags'][id]
-          }
-        else
-          tags = []
-          self.context['_posts']['tags'].each_value { |tag|
-            tags << tag
-          }
-          tags
-        end
-      end
-      
-      def posts_list(sub_context)
-        sub_context = sub_context.is_a?(Array) ? sub_context : self.context['_posts']['chronological']
-        
-        sub_context.map { |id|
-          self.context['_posts']['dictionary'][id] if self.context['_posts']['dictionary'][id]
-        }
-      end
-      
-      def pages_list(sub_context)
-        puts "=> call: pages_list with context: #{sub_context}"
-        pages = []
-        if sub_context.is_a?(Array) 
-          sub_context.each do |id|
-            if self.context[:pages][id]
-              pages << self.context[:pages][id]
-            end
-          end
-        else
-          self.context[:pages].each_value {|page| pages << page }
-        end
-        pages
-      end
-      
+    def context
+      @context ||= HelperContext.new(self)
     end
     
+    def tags_list(sub_context)
+      if sub_context.is_a?(Array)
+        sub_context.map { |id|
+          self.context['_posts']['tags'][id] if self.context['_posts']['tags'][id]
+        }
+      else
+        tags = []
+        self.context['_posts']['tags'].each_value { |tag|
+          tags << tag
+        }
+        tags
+      end
+    end
+    
+    def posts_list(sub_context)
+      sub_context = sub_context.is_a?(Array) ? sub_context : self.context['_posts']['chronological']
+      
+      sub_context.map { |id|
+        self.context['_posts']['dictionary'][id] if self.context['_posts']['dictionary'][id]
+      }
+    end
+    
+    def pages_list(sub_context)
+      puts "=> call: pages_list with context: #{sub_context}"
+      pages = []
+      if sub_context.is_a?(Array) 
+        sub_context.each do |id|
+          if self.context[:pages][id]
+            pages << self.context[:pages][id]
+          end
+        end
+      else
+        self.context[:pages].each_value {|page| pages << page }
+      end
+      pages
+    end
+    
+  end #HelperMustache
+  
+  
+  module Generate
+
     def self.go
       sub = nil
       master = nil
@@ -133,11 +122,11 @@ module RuhOh
       page['content'] = content.gsub(FMregex, '')
       
       sub = File.join( theme_path, 'layouts', "#{page['layout']}.html")
-      sub = RuhOh::parse_file(sub)
+      sub = RuhOh::Utils.parse_file(sub)
       
       if sub[0]['layout']
         master = File.join( theme_path, 'layouts', "#{sub[0]['layout']}.html")
-        master = RuhOh::parse_file(master)
+        master = RuhOh::Utils.parse_file(master)
       end
 
       payload = {
@@ -156,13 +145,6 @@ module RuhOh
         output = master[1].gsub(ContentRegex, output);
       end
       
-      #RMustache.raise_on_context_miss = true
-      test = '<ul class="nav">
-      {{# ?tags_list }}
-        <li><a href="#">{{name}} {{count}}</a></li>
-      {{/ ?tags_list }}
-      </ul>'
-      
       test = '
       {{#?tags_list}}
         <h2 id="{{name}}-ref">{{name}}</h2>
@@ -171,8 +153,7 @@ module RuhOh
         {{/posts?posts_list}}
       {{/?tags_list}}
       '
-      puts RMustache.render(test, payload)
-      #puts Mustache.render(output, payload)
+      puts HelperMustache.render(test, payload)
     end
     
   end
@@ -490,4 +471,19 @@ module RuhOh
 
   end  # Watch
 
+  module Utils
+
+    def self.parse_file(file_path)
+      page = File.open(file_path).read
+      front_matter = page.match(RuhOh::FMregex)
+      raise "Invalid Frontmatter" unless front_matter
+
+      data = YAML.load(front_matter[0].gsub(/---\n/, "")) || {}
+      content = page.gsub(FMregex, '')
+    
+      [data, content]
+    end
+  
+  end
+  
 end # RuhOh  
