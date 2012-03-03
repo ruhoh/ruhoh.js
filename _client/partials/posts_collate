@@ -2,8 +2,8 @@
 {{#months}}
   <h3>{{month}}</h3>
   <ul>
-    {{#posts}}
+  {{#posts?to_posts}}
     <li><span>{{date}}</span> &raquo; <a href="{{url}}">{{title}}</a></li>
-    {{/posts}}
+  {{/posts?to_posts}}
   </ul>
 {{/months}}
