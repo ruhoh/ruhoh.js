@@ -1,32 +1,6 @@
 
 task :m do
-  Ruhoh::Generate.go
-end
-
-namespace :site do
-  
-  desc "Create a new website framework"
-  task :new do
-    name = ENV['name']
-    abort("Must specify a name for your website") unless name
-    
-    FileUtils.cp_r('./_scaffold/blog', "./#{name}")
-    FileUtils.cp_r('./_scaffold/theme', "./#{name}/_themes/stock")
-  end
-  
-end
-
-namespace :theme do
-
-  desc "Create a new theme framework"
-  task :new do
-    name = ENV['name']
-    abort("Must specify a name for your website") unless name
-    
-    new_theme_path = "#{Ruhoh.config.site_source_path}/_themes/#{name}"
-    FileUtils.cp_r('./_scaffold/theme', new_theme_path)
-  end
-
+  Ruhoh::Generate.test
 end
 
 task :generate => 'generate:all'

@@ -1,5 +1,0 @@
----
-  layout : page
----
-
-# Hello World
