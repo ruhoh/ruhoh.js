@@ -21,7 +21,7 @@ define([
       
       this.bind("route:home", function(){
         this.preview.page.clear({silent : true})
-        this.preview.page.set('path', 'index.md')
+        this.preview.page.set('path', '_pages/index.md')
       }, this)
       
       this.bind("route:page", function(page){

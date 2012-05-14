@@ -13,6 +13,7 @@ define([
         'time' : new Date().toString(),
         'basePath' : (attrs.basePath || '/'),
         'postsDirectory' : '_posts',
+        'pagesDirectory' : '_pages',
       })
       this.buildBasePath();
       this.bind("change:basePath", this.buildBasePath, this);
@@ -23,7 +24,7 @@ define([
     },
 
     url : function(){
-      return this.get('site_source') +'/_config.yml';
+      return '/' + this.fileJoin(this.get('site_source'), '/_config.yml');
     },
 
     parse : function(response){
