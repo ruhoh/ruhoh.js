@@ -41,7 +41,8 @@ define([
       var that = this;
       
       $.get('/').pipe(function(a,b,jqxhr){
-        that.config = new Config({'site_source' : '/' + jqxhr.getResponseHeader('x-ruhoh-site-source-folder') });
+        //that.config = new Config({'site_source' : '/' + jqxhr.getResponseHeader('x-ruhoh-site-source-folder') });
+        that.config = new Config({'site_source' : '/' });
         return that.config.generate();
       }).done(function(){
         
