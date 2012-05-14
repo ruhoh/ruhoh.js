@@ -28,13 +28,10 @@ module Ruhoh
   #
   def self.setup
     base_directory = Dir.getwd
-    config = File.open(File.join(base_directory, 'ruhoh.json'), "r").read
-    config = JSON.parse(config)
-
-    site_config = YAML.load_file( File.join(config['site_source'], '_config.yml') )
+    site_config = YAML.load_file('_config.yml')
     
     c = Config.new
-    c.site_source_path = File.join(base_directory, config['site_source'])
+    c.site_source_path = base_directory
     c.database_folder = '_database'
     c.posts_path = File.join(c.site_source_path, '_posts')
     c.posts_data_path = File.join(c.site_source_path, c.database_folder, 'posts_dictionary.yml')
@@ -128,7 +125,7 @@ module Ruhoh
   
   module Generate
     
-    def self.go
+    def self.test
       sub = nil
       master = nil
       theme_path = File.join(Ruhoh.config.site_source_path, '_themes', Ruhoh.config.theme)
@@ -392,7 +389,7 @@ module Ruhoh
       invalid_pages = []
       dictionary = {}
       total_pages = 0
-      FileUtils.cd(Ruhoh.config.site_source_path) {
+      FileUtils.cd(File.join(Ruhoh.config.site_source_path, "_pages")) {
         Dir.glob("**/*.*") { |filename| 
           next if FileTest.directory?(filename)
           next if ['_', '.'].include? filename[0]

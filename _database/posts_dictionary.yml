@@ -1,0 +1,150 @@
+--- 
+dictionary: 
+  2008-8-01-a-sample-post.md: &id004 
+    layout: post
+    title: Meep Meep =) vroom vroom
+    category: old-posts
+    tags: 
+    - apple
+    - banana
+    - lemon
+    - orange
+    date: 2008-8-01
+    id: 2008-8-01-a-sample-post.md
+    url: /old-posts/meep-meep-%3D%29-vroom-vroom
+  2012-1-01-fruits.md: &id002 
+    layout: post
+    title: How to eat fruit.
+    category: sample
+    tags: 
+    - apple
+    - banana
+    - lemon
+    date: 2012-1-01
+    id: 2012-1-01-fruits.md
+    url: /sample/how-to-eat-fruit
+  2012-2-21-haro-post.md: &id001 
+    layout: post
+    title: My most recent post
+    category: cool
+    tags: 
+    - apple
+    - banana
+    - lemon
+    - pear
+    date: 2012-2-21
+    id: 2012-2-21-haro-post.md
+    url: /cool/my-most-recent-post
+  random/2011-12-01-hello-world.md: &id003 
+    layout: post
+    title: Hello World =)!
+    category: 
+    - samples
+    - yay
+    tags: 
+    - intro
+    - beginner
+    - jekyll
+    - tutorial
+    - apple
+    date: "2011-12-01"
+    id: random/2011-12-01-hello-world.md
+    url: /samples/yay/hello-world-%3D%29%21
+chronological: 
+- 2012-2-21-haro-post.md
+- 2012-1-01-fruits.md
+- random/2011-12-01-hello-world.md
+- 2008-8-01-a-sample-post.md
+collated: 
+- year: "2012"
+  months: 
+  - month: February
+    posts: 
+    - *id001
+  - month: January
+    posts: 
+    - *id002
+- year: "2011"
+  months: 
+  - month: December
+    posts: 
+    - *id003
+- year: "2008"
+  months: 
+  - month: August
+    posts: 
+    - *id004
+tags: 
+  apple: 
+    count: 4
+    name: apple
+    posts: 
+    - 2012-2-21-haro-post.md
+    - 2012-1-01-fruits.md
+    - random/2011-12-01-hello-world.md
+    - 2008-8-01-a-sample-post.md
+  banana: 
+    count: 3
+    name: banana
+    posts: 
+    - 2012-2-21-haro-post.md
+    - 2012-1-01-fruits.md
+    - 2008-8-01-a-sample-post.md
+  lemon: 
+    count: 3
+    name: lemon
+    posts: 
+    - 2012-2-21-haro-post.md
+    - 2012-1-01-fruits.md
+    - 2008-8-01-a-sample-post.md
+  pear: 
+    count: 1
+    name: pear
+    posts: 
+    - 2012-2-21-haro-post.md
+  intro: 
+    count: 1
+    name: intro
+    posts: 
+    - random/2011-12-01-hello-world.md
+  beginner: 
+    count: 1
+    name: beginner
+    posts: 
+    - random/2011-12-01-hello-world.md
+  jekyll: 
+    count: 1
+    name: jekyll
+    posts: 
+    - random/2011-12-01-hello-world.md
+  tutorial: 
+    count: 1
+    name: tutorial
+    posts: 
+    - random/2011-12-01-hello-world.md
+  orange: 
+    count: 1
+    name: orange
+    posts: 
+    - 2008-8-01-a-sample-post.md
+categories: 
+  cool: 
+    count: 1
+    name: cool
+    posts: 
+    - 2012-2-21-haro-post.md
+  sample: 
+    count: 1
+    name: sample
+    posts: 
+    - 2012-1-01-fruits.md
+  samples/yay: 
+    count: 1
+    name: samples/yay
+    posts: 
+    - random/2011-12-01-hello-world.md
+  old-posts: 
+    count: 1
+    name: old-posts
+    posts: 
+    - 2008-8-01-a-sample-post.md
