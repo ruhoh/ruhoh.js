@@ -1,10 +1,9 @@
 require 'rack'
-require './_lib/ruhoh'
-
-Ruhoh.setup
-Ruhoh::Posts.generate
-Ruhoh::Pages.generate
-Ruhoh::Watch.start
+#require './_lib/ruhoh'
+#Ruhoh.setup
+#Ruhoh::Posts.generate
+#Ruhoh::Pages.generate
+#Ruhoh::Watch.start
 
 use Rack::Lint
 use Rack::ShowExceptions
